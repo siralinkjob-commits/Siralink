@@ -30,7 +30,7 @@
             width: 100%;
             max-width: 390px;
             height: 100vh;
-            max-height: 844px; /* iPhone screen ratio */
+            max-height: 844px;
             background: #060913;
             display: flex;
             flex-direction: column;
@@ -47,132 +47,102 @@
             flex-direction: column;
             padding: 20px;
             overflow-y: auto;
-            padding-bottom: 90px; /* ለታችኛው ናቪጌሽን ቦታ */
+            padding-bottom: 90px;
         }
 
         .page.active {
             display: flex;
         }
 
-        /* ==================== 1. SPLASH PAGE STYLES ==================== */
-        #splash-page {
-            background: linear-gradient(180deg, #0b142c 0%, #060913 100%);
-            justify-content: space-between;
-            padding-bottom: 30px;
+        /* አዝራሮች */
+        .btn {
+            width: 100%; padding: 15px; border-radius: 14px;
+            font-size: 16px; font-weight: 600; cursor: pointer;
+            transition: all 0.3s ease; border: none;
+            text-align: center;
         }
+        .btn-primary { background-color: #2563eb; color: white; }
+        .btn-primary:hover { background-color: #1d4ed8; }
+        .btn-secondary { background-color: transparent; color: white; border: 1px solid #334155; }
 
-        .logo-section { text-align: left; margin-top: 20px; }
-        .logo-icon {
-            width: 50px; height: 50px;
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            border-radius: 14px; display: flex;
-            align-items: center; justify-content: center;
-            font-size: 26px; font-weight: bold; margin-bottom: 15px;
+        /* Form Inputs (አዲስ ለProfile ገጽ የተጨመረ) */
+        .form-group {
+            display: flex; flex-direction: column; gap: 8px; margin-bottom: 18px;
         }
+        .form-group label { font-size: 13px; color: #94a3b8; font-weight: 500; }
+        .form-input, .form-select {
+            width: 100%; padding: 14px; background: #111827; border: 1px solid #1f2937;
+            border-radius: 12px; color: white; font-size: 14px; outline: none;
+        }
+        .form-input:focus, .form-select:focus { border-color: #2563eb; }
+
+        /* ==================== 1. SPLASH PAGE STYLES ==================== */
+        #splash-page { background: linear-gradient(180deg, #0b142c 0%, #060913 100%); justify-content: space-between; padding-bottom: 30px; }
+        .logo-section { text-align: left; margin-top: 20px; }
+        .logo-icon { width: 50px; height: 50px; background: linear-gradient(135deg, #2563eb, #1d4ed8); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: bold; margin-bottom: 15px; }
         .logo-text { font-size: 28px; font-weight: 700; }
         .tagline { font-size: 13px; color: #94a3b8; margin-top: 4px; }
         .hero-section { margin: 40px 0; }
         .hero-section h2 { font-size: 30px; font-weight: 800; line-height: 1.3; margin-bottom: 15px; }
         .hero-section .description { font-size: 14px; color: #94a3b8; line-height: 1.6; }
         .action-section { display: flex; flex-direction: column; gap: 12px; }
-        
-        .btn {
-            width: 100%; padding: 15px; border-radius: 14px;
-            font-size: 16px; font-weight: 600; cursor: pointer;
-            transition: all 0.3s ease; border: none;
-        }
-        .btn-primary { background-color: #2563eb; color: white; }
-        .btn-primary:hover { background-color: #1d4ed8; }
-        .btn-secondary { background-color: transparent; color: white; border: 1px solid #334155; }
-
-        .stats-section {
-            display: flex; justify-content: space-between;
-            background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(10px);
-            border-radius: 16px; padding: 15px; border: 1px solid rgba(255,255,255,0.05);
-        }
+        .stats-section { display: flex; justify-content: space-between; background: rgba(30, 41, 59, 0.4); backdrop-filter: blur(10px); border-radius: 16px; padding: 15px; border: 1px solid rgba(255,255,255,0.05); }
         .stat-box { text-align: center; flex: 1; }
         .stat-box h3 { font-size: 18px; color: #ffffff; }
         .stat-box p { font-size: 11px; color: #64748b; }
 
         /* ==================== 2. HOME PAGE STYLES ==================== */
-        .home-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
+        .home-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .user-profile-summary h2 { font-size: 20px; font-weight: 700; }
         .user-profile-summary p { font-size: 13px; color: #94a3b8; }
-        .notification-icon {
-            width: 40px; height: 40px; background: #1e293b;
-            border-radius: 50%; display: flex; align-items: center;
-            justify-content: center; cursor: pointer; font-size: 18px;
-        }
-
-        /* Search Bar */
-        .search-container {
-            position: relative; margin-bottom: 25px;
-        }
-        .search-input {
-            width: 100%; padding: 14px 15px 14px 45px;
-            background: #111827; border: 1px solid #1f2937;
-            border-radius: 12px; color: white; font-size: 14px;
-            outline: none; transition: border 0.3s;
-        }
-        .search-input:focus { border-color: #2563eb; }
-        .search-icon-placeholder {
-            position: absolute; left: 15px; top: 50%;
-            transform: translateY(-50%); color: #64748b;
-        }
-
-        /* Categories Section */
-        .section-title {
-            font-size: 16px; font-weight: 600; margin-bottom: 12px;
-            display: flex; justify-content: space-between; align-items: center;
-        }
+        .notification-icon { width: 40px; height: 40px; background: #1e293b; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; }
+        .search-container { position: relative; margin-bottom: 25px; }
+        .search-input { width: 100%; padding: 14px 15px 14px 45px; background: #111827; border: 1px solid #1f2937; border-radius: 12px; color: white; font-size: 14px; outline: none; }
+        .search-icon-placeholder { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #64748b; }
+        .section-title { font-size: 16px; font-weight: 600; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
         .section-title span { font-size: 12px; color: #2563eb; cursor: pointer; }
-        
-        .categories-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr);
-            gap: 10px; margin-bottom: 25px;
-        }
-        .category-card {
-            background: #111827; border: 1px solid #1f2937;
-            border-radius: 12px; padding: 12px; text-align: center;
-            cursor: pointer; transition: transform 0.2s;
-        }
-        .category-card:active { transform: scale(0.95); }
+        .categories-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 25px; }
+        .category-card { background: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 12px; text-align: center; cursor: pointer; }
         .category-emoji { font-size: 22px; margin-bottom: 6px; }
         .category-name { font-size: 11px; color: #e2e8f0; font-weight: 500; }
-
-        /* Job List Section */
-        .job-list {
-            display: flex; flex-direction: column; gap: 12px;
-        }
-        .job-card {
-            background: rgba(17, 24, 39, 0.7);
-            border: 1px solid #1f2937; border-radius: 14px;
-            padding: 15px; cursor: pointer; transition: background 0.2s;
-        }
-        .job-card:active { background: #1f2937; }
+        .job-list { display: flex; flex-direction: column; gap: 12px; }
+        .job-card { background: rgba(17, 24, 39, 0.7); border: 1px solid #1f2937; border-radius: 14px; padding: 15px; cursor: pointer; }
         .job-card-header { display: flex; gap: 12px; margin-bottom: 10px; }
-        .company-logo {
-            width: 40px; height: 40px; background: #1e293b;
-            border-radius: 8px; display: flex; align-items: center;
-            justify-content: center; font-weight: bold; color: #2563eb;
-        }
+        .company-logo { width: 40px; height: 40px; background: #1e293b; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #2563eb; }
         .job-info h4 { font-size: 15px; font-weight: 600; color: #ffffff; }
         .job-info p { font-size: 12px; color: #94a3b8; }
-        .job-details-row {
-            display: flex; justify-content: space-between;
-            align-items: center; margin-top: 10px;
-            border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px;
-        }
-        .job-tag {
-            background: rgba(37, 99, 235, 0.1); color: #3b82f6;
-            padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 500;
-        }
+        .job-details-row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 10px; }
+        .job-tag { background: rgba(37, 99, 235, 0.1); color: #3b82f6; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 500; }
         .job-salary { font-size: 12px; color: #10b981; font-weight: 600; }
+
+        /* ==================== 3. JOB DETAILS PAGE STYLES ==================== */
+        .back-btn { font-size: 14px; color: #3b82f6; cursor: pointer; margin-bottom: 20px; display: inline-flex; align-items: center; gap: 5px; }
+        .details-header { text-align: center; margin-bottom: 25px; }
+        .details-logo { width: 70px; height: 70px; background: #1e293b; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 28px; font-weight: bold; color: #2563eb; margin: 0 auto 15px auto; }
+        .details-header h2 { font-size: 22px; font-weight: 700; margin-bottom: 5px; }
+        .details-header p { font-size: 14px; color: #94a3b8; }
+        .info-pills-row { display: flex; gap: 10px; justify-content: center; margin-bottom: 25px; }
+        .info-pill { background: #111827; border: 1px solid #1f2937; padding: 8px 14px; border-radius: 20px; font-size: 12px; color: #e2e8f0; }
+        .details-body { display: flex; flex-direction: column; gap: 20px; }
+        .details-section h4 { font-size: 15px; color: #3b82f6; margin-bottom: 8px; font-weight: 600; }
+        .details-section p, .details-section li { font-size: 13.5px; color: #cbd5e1; line-height: 1.6; }
+        .details-section ul { padding-left: 20px; }
+        .details-section li { margin-bottom: 6px; }
+        .application-box { background: #111827; border: 1px dashed #334155; border-radius: 14px; padding: 20px; text-align: center; margin-top: 15px; }
+        .application-box p { font-size: 13px; color: #94a3b8; margin-bottom: 12px; }
+        .file-input-label { background: #1e293b; color: white; padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; display: inline-block; }
+        #cv-file, #profile-cv-file { display: none; }
+        .file-status { font-size: 12px; color: #10b981; margin-top: 8px; display: none; font-weight: 500; }
+
+        /* ==================== 4. PROFILE PAGE STYLES (NEW) ==================== */
+        .profile-header { text-align: center; margin-bottom: 25px; position: relative; }
+        .profile-avatar-box {
+            width: 80px; height: 80px; background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 50%; font-size: 32px; display: flex; align-items: center;
+            justify-content: center; margin: 0 auto 12px auto; box-shadow: 0 4px 10px rgba(37,99,235,0.3);
+        }
+        .profile-header h2 { font-size: 20px; font-weight: 700; }
+        .profile-header p { font-size: 12px; color: #94a3b8; }
 
         /* ==================== BOTTOM NAVIGATION BAR ==================== */
         .bottom-nav {
@@ -182,10 +152,7 @@
             display: none; justify-content: space-around; align-items: center;
             z-index: 10;
         }
-        .nav-item {
-            display: flex; flex-direction: column; align-items: center;
-            color: #64748b; cursor: pointer; font-size: 11px; font-weight: 500;
-        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #64748b; cursor: pointer; font-size: 11px; font-weight: 500; }
         .nav-item.active { color: #2563eb; }
         .nav-icon { font-size: 20px; margin-bottom: 4px; }
     </style>
@@ -218,7 +185,7 @@
         <div id="home-page" class="page">
             <div class="home-header">
                 <div class="user-profile-summary">
-                    <h2>ሰላም፣ ስራ ፈላጊ 👋</h2>
+                    <h2 id="home-user-greeting">ሰላም 👋</h2>
                     <p>ለእርስዎ የሚሆኑ አዳዲስ ስራዎች</p>
                 </div>
                 <div class="notification-icon" onclick="alert('አዲስ ማሳወቂያ የለም')">🔔</div>
@@ -229,42 +196,22 @@
                 <input type="text" class="search-input" placeholder="የስራ መደብ ወይም የድርጅት ስም ይፈልጉ...">
             </div>
 
-            <div class="section-title">
-                <h3>የስራ ምድቦች</h3>
-                <span>ሁሉንም እይ</span>
-            </div>
+            <div class="section-title"><h3>የስራ ምድቦች</h3><span>ሁሉንም እይ</span></div>
             <div class="categories-grid">
                 <div class="category-card" onclick="alert('የ IT ስራዎች ተመርጠዋል')">
-                    <div class="category-emoji">💻</div>
-                    <div class="category-name">Software / IT</div>
+                    <div class="category-emoji">💻</div><div class="category-name">Software / IT</div>
                 </div>
                 <div class="category-card" onclick="alert('የ Finance ስራዎች ተመርጠዋል')">
-                    <div class="category-emoji">📊</div>
-                    <div class="category-name">Accounting</div>
+                    <div class="category-emoji">📊</div><div class="category-name">Accounting</div>
                 </div>
                 <div class="category-card" onclick="alert('የጤና ስራዎች ተመርጠዋል')">
-                    <div class="category-emoji">🏥</div>
-                    <div class="category-name">Health Care</div>
-                </div>
-                <div class="category-card" onclick="alert('የምህንድስና ስራዎች ተመርጠዋል')">
-                    <div class="category-emoji">🏗️</div>
-                    <div class="category-name">Engineering</div>
-                </div>
-                <div class="category-card" onclick="alert('የማስተማር ስራዎች ተመርጠዋል')">
-                    <div class="category-emoji">👩‍🏫</div>
-                    <div class="category-name">Education</div>
-                </div>
-                <div class="category-card" onclick="alert('የሽያጭ ስራዎች ተመርጠዋል')">
-                    <div class="category-emoji">🤝</div>
-                    <div class="category-name">Marketing</div>
+                    <div class="category-emoji">🏥</div><div class="category-name">Health Care</div>
                 </div>
             </div>
 
-            <div class="section-title">
-                <h3>የቅርብ ጊዜ ስራዎች</h3>
-            </div>
+            <div class="section-title"><h3>የቅርብ ጊዜ ስራዎች</h3></div>
             <div class="job-list">
-                <div class="job-card" onclick="alert('የስራው ዝርዝር ገና አልተሰራም!')">
+                <div class="job-card" onclick="openJobDetails('Full Stack Developer', 'SiraLink Technology', 'አዲስ አበባ', '25,000 ETB - 35,000 ETB', 'Full Time', 'የ SiraLink ቴሌግራም ሚኒ አፕ እና የዌብ ዳሽቦርዶችን ከተሟላ የደህንነት መዋቅር ጋር ማልማት እና መቆጣጠር የሚችል ባለሙያ እንፈልጋለን።')">
                     <div class="job-card-header">
                         <div class="company-logo">SL</div>
                         <div class="job-info">
@@ -277,7 +224,7 @@
                         <div class="job-salary">25,000 ETB - 35,000 ETB</div>
                     </div>
                 </div>
-                <div class="job-card" onclick="alert('የስራው ዝርዝር ገና አልተሰራም!')">
+                <div class="job-card" onclick="openJobDetails('Senior Accountant', 'Commercial Bank', 'ድሬዳዋ', 'Negotiable', 'Permanent', 'የባንኩን የሂሳብ መዛግብት ማስተካከል... የአምስት አመት የስራ ልምድ ያለው ባለሙያ።')">
                     <div class="job-card-header">
                         <div class="company-logo">CB</div>
                         <div class="job-info">
@@ -293,18 +240,86 @@
             </div>
         </div>
 
+        <div id="job-details-page" class="page">
+            <div class="back-btn" onclick="navigateTo('home-page')">⬅️ ተመለስ</div>
+            <div class="details-header">
+                <div class="details-logo" id="detail-logo">SL</div>
+                <h2 id="detail-title">Job Title</h2>
+                <p id="detail-company">Company Name</p>
+            </div>
+            <div class="info-pills-row">
+                <div class="info-pill" id="detail-tag">Type</div>
+                <div class="info-pill" id="detail-salary" style="color: #10b981; font-weight: bold;">Salary</div>
+            </div>
+            <div class="details-body">
+                <div class="details-section">
+                    <h4>የስራው መግለጫ (Description)</h4>
+                    <p id="detail-desc">መግለጫ...</p>
+                </div>
+                <div class="details-section">
+                    <h4>ማመልከቻ (Apply)</h4>
+                    <div class="application-box">
+                        <p>የእርስዎን የሲቪ (CV) የ PDF ፋይል እዚህ ይጫኑ</p>
+                        <label for="cv-file" class="file-input-label">📁 ፋይል ምረጥ</label>
+                        <input type="file" id="cv-file" accept=".pdf" onchange="handleFileChange('cv-file', 'file-status-text')">
+                        <div id="file-status-text" class="file-status">✓ ሲቪ በተሳካ ሁኔታ ተመርጧል!</div>
+                        <button class="btn btn-primary" style="margin-top: 15px; padding: 12px;" onclick="submitApplication()">አፕሊኬሽኑን ላክ (Apply)</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="profile-page" class="page">
+            <div class="profile-header">
+                <div class="profile-avatar-box">👤</div>
+                <h2 id="profile-display-name">የግል መገለጫ</h2>
+                <p>መረጃዎን እዚህ ያደራጁ</p>
+            </div>
+
+            <div class="details-body">
+                <div class="form-group">
+                    <label for="user-fullname">ሙሉ ስም (Full Name)</label>
+                    <input type="text" id="user-fullname" class="form-input" placeholder="ለምሳሌ፡ ዮናስ አበበ">
+                </div>
+
+                <div class="form-group">
+                    <label for="user-phone">ስልክ ቁጥር (Phone Number)</label>
+                    <input type="tel" id="user-phone" class="form-input" placeholder="ለምሳሌ፡ 0911223344">
+                </div>
+
+                <div class="form-group">
+                    <label for="user-category">ዋና የሙያ ዘርፍ (Profession)</label>
+                    <select id="user-category" class="form-select">
+                        <option value="">ዘርፍ ይምረጡ...</option>
+                        <option value="Software / IT">Software / IT</option>
+                        <option value="Accounting">Accounting</option>
+                        <option value="Health Care">Health Care</option>
+                        <option value="Engineering">Engineering</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>ዋና ሲቪ (Main CV - PDF)</label>
+                    <div class="application-box" style="margin-top: 5px; padding: 15px;">
+                        <label for="profile-cv-file" class="file-input-label" style="padding: 8px 16px; font-size: 12px;">📁 ሲቪ ቀይር/ጫን</label>
+                        <input type="file" id="profile-cv-file" accept=".pdf" onchange="handleFileChange('profile-cv-file', 'profile-file-status')">
+                        <div id="profile-file-status" class="file-status">✓ ሲቪ ተያይዟል!</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" style="margin-top: 10px;" onclick="saveProfile()">መረጃውን አስቀምጥ (Save)</button>
+            </div>
+        </div>
+
         <div id="global-nav" class="bottom-nav">
-            <div class="nav-item active" onclick="switchTab('home-page', this)">
-                <div class="nav-icon">🏠</div>
-                <div>Home</div>
+            <div id="nav-home" class="nav-item active" onclick="switchTab('home-page', this)">
+                <div class="nav-icon">🏠</div><div>Home</div>
             </div>
-            <div class="nav-item" onclick="alert('የማመልከቻዎች ገጽ በቀጣይ ደረጃ ይሰራል!')">
-                <div class="nav-icon">💼</div>
-                <div>Applications</div>
+            <div id="nav-apps" class="nav-item" onclick="alert('የማመልከቻዎች ክትትል ገጽ በቀጣይ ይሰራል!')">
+                <div class="nav-icon">💼</div><div>Applications</div>
             </div>
-            <div class="nav-item" onclick="alert('የግል ፕሮፋይል ገጽ በቀጣይ ደረጃ ይሰራል!')">
-                <div class="nav-icon">👤</div>
-                <div>Profile</div>
+            <div id="nav-profile" class="nav-item" onclick="switchTab('profile-page', this)">
+                <div class="nav-icon">👤</div><div>Profile</div>
             </div>
         </div>
 
@@ -312,15 +327,13 @@
 
     <script>
         function navigateTo(pageId) {
-            // ሁሉንም ገጾች ደብቅ
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
             });
-            // የተመረጠውን ገጽ አሳይ
             document.getElementById(pageId).classList.add('active');
             
-            // ዋናው ገጽ ላይ ከደረስን የታችኛውን ናቪጌሽን ባር አሳይ
-            if(pageId === 'home-page') {
+            // የትኛዎቹ ገጾች ላይ ከታች ያለው ማውጫ (Navigation) እንዲታይ መወሰን
+            if(pageId === 'home-page' || pageId === 'profile-page') {
                 document.getElementById('global-nav').style.display = 'flex';
             } else {
                 document.getElementById('global-nav').style.display = 'none';
@@ -333,6 +346,73 @@
             });
             element.classList.add('active');
             navigateTo(pageId);
+        }
+
+        function openJobDetails(title, company, location, salary, tag, desc) {
+            document.getElementById('detail-title').innerText = title;
+            document.getElementById('detail-company').innerText = company + " • " + location;
+            document.getElementById('detail-salary').innerText = salary;
+            document.getElementById('detail-tag').innerText = tag;
+            document.getElementById('detail-desc').innerText = desc;
+            document.getElementById('detail-logo').innerText = company.substring(0, 2).toUpperCase();
+            
+            document.getElementById('cv-file').value = "";
+            document.getElementById('file-status-text').style.display = "none";
+            navigateTo('job-details-page');
+        }
+
+        function handleFileChange(inputId, statusId) {
+            const fileInput = document.getElementById(inputId);
+            if(fileInput.files.length > 0) {
+                document.getElementById(statusId).style.display = "block";
+            }
+        }
+
+        function submitApplication() {
+            const fileInput = document.getElementById('cv-file');
+            if(fileInput.files.length === 0) {
+                alert("እባክዎ መጀመሪያ የሲቪ (CV) ፋይል ይጫኑ!");
+                return;
+            }
+            alert("ማመልከቻዎ በተሳካ ሁኔታ ተልኳል!");
+            navigateTo('home-page');
+        }
+
+        // አዲስ መረጃዎችን በጊዜያዊነት የመቆጠብያ ተግባር (Profile Logic)
+        function saveProfile() {
+            const fullname = document.getElementById('user-fullname').value;
+            const phone = document.getElementById('user-phone').value;
+            const category = document.getElementById('user-category').value;
+
+            if(!fullname || !phone) {
+                alert("እባክዎ ስምና ስልክ ቁጥር በትክክል ያስገቡ!");
+                return;
+            }
+
+            // በስልኩ ሎካል ሚሞሪ (localStorage) ላይ መረጃውን መያዝ
+            localStorage.setItem('siralink_name', fullname);
+            localStorage.setItem('siralink_phone', phone);
+            
+            // ዋናውን ገጽ ስም ማዘመን
+            document.getElementById('home-user-greeting').innerText = "ሰላም፣ " + fullname + " 👋";
+            document.getElementById('profile-display-name').innerText = fullname;
+
+            alert("የግል መረጃዎ በተሳካ ሁኔታ ተቀምጧል!");
+            switchTab('home-page', document.getElementById('nav-home'));
+        }
+
+        // መተግበሪያው ሲከፈት የድሮ መረጃ ካለ ራስ-ሰር መጫኛ
+        window.onload = function() {
+            const savedName = localStorage.getItem('siralink_name');
+            if(savedName) {
+                document.getElementById('user-fullname').value = savedName;
+                document.getElementById('profile-display-name').innerText = savedName;
+                document.getElementById('home-user-greeting').innerText = "ሰላም፣ " + savedName + " 👋";
+            }
+            const savedPhone = localStorage.getItem('siralink_phone');
+            if(savedPhone) {
+                document.getElementById('user-phone').value = savedPhone;
+            }
         }
     </script>
 </body>
