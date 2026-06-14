@@ -1,876 +1,526 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SiraLink</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
-body{
-background:#f5f7fb;
-color:#222;
-}
-
-.page{
-display:none;
-padding:20px;
-padding-bottom:90px;
-}
-
-.active{
-display:block;
-}
-
-#splash{
-height:100vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-background:linear-gradient(135deg,#2563eb,#4f46e5);
-color:white;
-}
-
-.logo{
-width:120px;
-height:120px;
-border-radius:50%;
-background:white;
-color:#2563eb;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:34px;
-font-weight:bold;
-margin-bottom:20px;
-}
-
-.app-title{
-font-size:34px;
-font-weight:bold;
-margin-bottom:10px;
-}
-
-.app-subtitle{
-font-size:16px;
-opacity:.9;
-margin-bottom:40px;
-}
-
-.btn{
-width:100%;
-padding:14px;
-border:none;
-border-radius:12px;
-background:#2563eb;
-color:white;
-font-size:16px;
-font-weight:bold;
-cursor:pointer;
-}
-
-.btn:hover{
-opacity:.9;
-}
-
-.card{
-background:white;
-padding:15px;
-border-radius:16px;
-margin-bottom:15px;
-box-shadow:0 3px 12px rgba(0,0,0,.08);
-}
-
-.welcome{
-font-size:18px;
-font-weight:bold;
-color:#2563eb;
-margin-bottom:15px;
-animation:slideText 10s linear infinite;
-white-space:nowrap;
-}
-
-@keyframes slideText{
-0%{transform:translateX(-100%);}
-100%{transform:translateX(100%);}
-}
-
-.topbar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:20px;
-}
-
-.profile-circle{
-width:55px;
-height:55px;
-border-radius:50%;
-background:#2563eb;
-color:white;
-display:flex;
-justify-content:center;
-align-items:center;
-font-size:22px;
-font-weight:bold;
-}
-
-.notification{
-font-size:22px;
-}
-
-.stats{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:12px;
-margin-bottom:20px;
-}
-
-.stat-box{
-background:white;
-padding:15px;
-border-radius:14px;
-text-align:center;
-box-shadow:0 2px 10px rgba(0,0,0,.08);
-}
-
-.stat-number{
-font-size:24px;
-font-weight:bold;
-color:#2563eb;
-}
-
-.bottom-nav{
-position:fixed;
-bottom:0;
-left:0;
-width:100%;
-background:white;
-display:flex;
-justify-content:space-around;
-padding:12px 0;
-box-shadow:0 -3px 12px rgba(0,0,0,.1);
-}
-
-.nav-btn{
-background:none;
-border:none;
-font-size:14px;
-font-weight:bold;
-color:#666;
-}
-
-.nav-btn.active-nav{
-color:#2563eb;
-}
-
-input,
-select,
-textarea{
-width:100%;
-padding:12px;
-border:1px solid #ddd;
-border-radius:10px;
-margin-bottom:12px;
-}
-
-.job-card{
-background:white;
-padding:15px;
-border-radius:14px;
-margin-bottom:12px;
-box-shadow:0 2px 10px rgba(0,0,0,.08);
-}
-
-.job-title{
-font-size:18px;
-font-weight:bold;
-margin-bottom:8px;
-}
-
-.badge{
-display:inline-block;
-padding:4px 10px;
-border-radius:20px;
-background:#e0e7ff;
-color:#2563eb;
-font-size:12px;
-margin-right:5px;
-}
-
-</style></head><body><div id="splash"><div class="logo">SL</div><div class="app-title">
-SiraLink
-</div><div class="app-subtitle">
-Telegram Employment Ecosystem
-</div><button class="btn" onclick="startApp()">
-GET STARTED
-</button></div><div id="home" class="page"><div class="topbar"><div class="profile-circle">
-U
-</div><div class="notification">
-🔔
-</div></div><div class="welcome">
-ሰላም Username እንኳን ወደ SiraLink በደህና መጡ
-</div><div class="stats"><div class="stat-box">
-<div class="stat-number">0</div>
-<div>Total Jobs</div>
-</div><div class="stat-box">
-<div class="stat-number">0</div>
-<div>Today's Jobs</div>
-</div></div><div class="card">
-<h3>Recent Jobs</h3>
-<p>No jobs available yet.</p>
-</div><div class="card">
-<h3>Quick Actions</h3>
-<p>Search Jobs, Complete Profile, Get Notifications</p>
-</div></div><div id="jobs" class="page"><h2>Jobs</h2><select id="department">
-<option>Department</option>
-</select><select id="location">
-<option>Location</option>
-</select><select>
-<option>Education Level</option>
-<option>Diploma</option>
-<option>Degree</option>
-<option>Masters</option>
-<option>PhD</option>
-</select><select>
-<option>Experience</option>
-<option>0</option>
-<option>1</option>
-<option>2</option>
-<option>3+</option>
-</select><button class="btn">
-Search Jobs
-</button><br><br>
-
-<div class="job-card"><div class="job-title">
-GIS Officer
-</div><span class="badge">
-Geography
-</span><span class="badge">
-Addis Ababa
-</span><p>
-Experience: 0 Year
-</p></div></div>
-
-<div id="profile" class="page"><h2>My Profile</h2><input type="text" id="fullName" placeholder="Full Name"><input type="number" id="birthYear" placeholder="Birth Year"><input type="number" id="birthMonth" placeholder="Birth Month"><select id="gender">
-<option value="">Gender</option>
-<option>Male</option>
-<option>Female</option>
-</select><input type="text" id="phone" placeholder="Phone Number"><select id="education"><option value="">
-Educational Level
-</option><option>Diploma</option>
-<option>Degree</option>
-<option>Masters</option>
-<option>PhD</option></select><input type="text"
-id="university"
-placeholder="University / College">
-
-<input type="text"
-id="departmentName"
-placeholder="Department">
-
-<input type="number"
-id="graduationYear"
-placeholder="Graduation Year">
-
-<select id="experience"><option>0</option>
-<option>1</option>
-<option>2</option>
-<option>3</option>
-<option>4+</option></select><input type="file"
-id="cvFile">
-
-<button class="btn"
-onclick="saveProfile()">
-
-Save Profile
-
-</button></div><div id="about" class="page"><h2>About SiraLink</h2><div class="card"><h3>Our 
-Mission</h3><p>SiraLink is a Telegram-based
-employment ecosystem built for
-Ethiopia.
-
-It connects job seekers,
-recruiters and opportunities
-through one simple platform.
-</p></div><div class="card"><h3>Contact Us</h3><p>📞 +251954406366
-
-</p><p>📧 siralink.job@gmail.com
-
-</p><p>💬 @SiralinkSupport
-
-</p></div></div><div class="bottom-nav"><button
-class="nav-btn active-nav"
-onclick="showPage('home',this)">
-🏠 Home
-</button>
-
-<button
-class="nav-btn"
-onclick="showPage('jobs',this)">
-💼 Jobs
-</button>
-
-<button
-class="nav-btn"
-onclick="showPage('profile',this)">
-👤 Profile
-</button>
-
-<button
-class="nav-btn"
-onclick="showPage('about',this)">
-ℹ️ About
-</button>
-
-</div><script>
-
-const SUPABASE_URL =
-"https://asljgfiiikvgixcftnlf.supabase.co";
-
-const SUPABASE_KEY =
-"sb_publishable_5iraJwEgk7TmWYXyCpc-tw_1Shs32kU";
-
-const supabase =
-window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
-);
-
-function startApp(){
-
-document.getElementById(
-'splash'
-).style.display='none';
-
-document.getElementById(
-'home'
-).classList.add('active');
-
-}
-
-function showPage(page,btn){
-
-document.querySelectorAll(
-'.page'
-).forEach(p=>{
-
-p.classList.remove('active');
-
-});
-
-document.getElementById(
-page
-).classList.add('active');
-
-document.querySelectorAll(
-'.nav-btn'
-).forEach(b=>{
-
-b.classList.remove(
-'active-nav'
-);
-
-});
-
-btn.classList.add(
-'active-nav'
-);
-
-}
-
-async function saveProfile(){
-let telegramId = 123456789; 
-let telegramUsername = "";
-
-if(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe.user){
-    telegramId = window.Telegram.WebApp.initDataUnsafe.user.id;
-    telegramUsername = window.Telegram.WebApp.initDataUnsafe.user.username || "";
-}
-
-const data = {
-telegram_id: telegramId,
-username: telegramUsername,
-full_name:
-document.getElementById(
-'fullName'
-).value,
-
-birth_year:
-document.getElementById(
-'birthYear'
-).value ? parseInt(document.getElementById('birthYear').value) : null,
-
-birth_month:
-document.getElementById(
-'birthMonth'
-).value ? parseInt(document.getElementById('birthMonth').value) : null,
-
-gender:
-document.getElementById(
-'gender'
-).value,
-
-phone_number:
-document.getElementById(
-'phone'
-).value,
-
-education_level:
-document.getElementById(
-'education'
-).value,
-
-university_college:
-document.getElementById(
-'university'
-).value,
-
-department:
-document.getElementById(
-'departmentName'
-).value,
-
-graduation_year:
-document.getElementById(
-'graduationYear'
-).value ? parseInt(document.getElementById('graduationYear').value) : null,
-
-experience_years:
-document.getElementById(
-'experience'
-).value ? parseInt(document.getElementById('experience').value) : 0,
-is_profile_completed: true
-};
-
-const { error } =
-await supabase
-
-.from('users')
-
-.insert([data]);
-
-if(error){
-console.error(error);
-alert(
-'Failed to Save: ' + error.message
-);
-
-}else{
-
-alert(
-'Profile Saved'
-);
-
-}
-
-}
-
-</script>
-
-<script>
-
-// ===============================
-// Load Dynamic Departments
-// ===============================
-
-async function loadDepartments(){
-
-const { data , error } =
-await supabase
-.from('jobs')
-.select('department');
-
-if(error) return;
-
-const unique =
-[...new Set(
-data.map(
-x => x.department
-).filter(Boolean)
-)];
-
-const select =
-document.getElementById(
-'department'
-);
-
-unique.forEach(dep=>{
-
-const option =
-document.createElement(
-'option'
-);
-
-option.value = dep;
-option.textContent = dep;
-
-select.appendChild(
-option
-);
-
-});
-
-}
-
-// ===============================
-// Load Dynamic Locations
-// ===============================
-
-async function loadLocations(){
-
-const { data , error } =
-await supabase
-.from('jobs')
-.select('location');
-
-if(error) return;
-
-const unique =
-[...new Set(
-data.map(
-x => x.location
-).filter(Boolean)
-)];
-
-const select =
-document.getElementById(
-'location'
-);
-
-unique.forEach(loc=>{
-
-const option =
-document.createElement(
-'option'
-);
-
-option.value = loc;
-option.textContent = loc;
-
-select.appendChild(
-option
-);
-
-});
-
-}
-
-// ===============================
-// Load Jobs
-// ===============================
-
-async function loadJobs(){
-
-const { data , error } =
-await supabase
-
-.from('jobs')
-
-.select('*')
-
-.eq('is_active',true)
-
-.order(
-'created_at',
-{ascending:false}
-);
-
-if(error) return;
-
-const jobsPage =
-document.getElementById(
-'jobs'
-);
-
-document
-.querySelectorAll(
-'.loaded-job'
-)
-.forEach(
-e=>e.remove()
-);
-
-data.forEach(job=>{
-
-const div =
-document.createElement(
-'div'
-);
-
-div.className =
-'job-card loaded-job';
-
-div.innerHTML = `
-
-<div class="job-title">
-${job.job_title}
-</div>
-
-<span class="badge">
-${job.department}
-</span>
-
-<span class="badge">
-${job.location}
-</span>
-
-<p>
-Education:
-${job.education_level || '-'}
-</p>
-
-<p>
-Experience:
-${job.experience_required || 0}
-Year
-</p>
-
-<p>
-${job.company_name}
-</p>
-
-`;
-
-jobsPage.appendChild(
-div
-);
-
-});
-
-}
-
-// ===============================
-// Total Jobs
-// ===============================
-
-async function loadTotalJobs(){
-
-const { count } =
-await supabase
-
-.from('jobs')
-
-.select(
-'*',
-{count:'exact',head:true}
-);
-
-const items =
-document.querySelectorAll(
-'.stat-number'
-);
-
-if(items[0])
-items[0].innerText =
-count || 0;
-
-}
-
-// ===============================
-// Today's Jobs
-// ===============================
-
-async function loadTodayJobs(){
-
-const today =
-new Date();
-
-today.setHours(
-0,0,0,0
-);
-
-const { data } =
-await supabase
-
-.from('jobs')
-
-.select('*')
-
-.gte(
-'created_at',
-today.toISOString()
-);
-
-const items =
-document.querySelectorAll(
-'.stat-number'
-);
-
-if(items[1])
-items[1].innerText =
-data.length;
-
-}
-
-// ===============================
-// Recent Jobs Feed
-// ===============================
-
-async function loadRecentJobs(){
-
-const { data } =
-await supabase
-
-.from('jobs')
-
-.select('*')
-
-.order(
-'created_at',
-{ascending:false}
-)
-
-.limit(5);
-
-const card =
-document.querySelector(
-'.card'
-);
-
-if(!card) return;
-
-let html =
-'<h3>Recent Jobs</h3>';
-
-data.forEach(job=>{
-
-html += `
-
-<p>
-
-✅ ${job.job_title}
-
-(${job.location})
-
-</p>
-
-`;
-
-});
-
-card.innerHTML =
-html;
-
-}
-
-// ===============================
-// Telegram Username
-// ===============================
-
-function loadTelegramUser(){
-
-if(
-window.Telegram &&
-window.Telegram.WebApp
-){
-
-const user =
-window.Telegram
-.WebApp
-.initDataUnsafe
-.user;
-
-if(user){
-
-const text =
-
-`ሰላም ${user.username || user.first_name}
-
-እንኳን ወደ SiraLink
-በደህና መጡ`;
-
-const welcome =
-document.querySelector(
-'.welcome'
-);
-
-if(welcome)
-welcome.innerText =
-text;
-
-const profile =
-document.querySelector(
-'.profile-circle'
-);
-
-if(profile)
-profile.innerText =
-user.first_name
-.charAt(0);
-
-}
-
-}
-
-}
-
-// ===============================
-// Notifications
-// ===============================
-
-async function loadNotifications(){
-
-const { data } =
-await supabase
-
-.from(
-'notifications'
-)
-
-.select('*')
-
-.eq(
-'is_read',
-false
-);
-
-const bell =
-document.querySelector(
-'.notification'
-);
-
-if(
-bell &&
-data &&
-data.length > 0
-){
-
-bell.innerHTML =
-`🔔 ${data.length}`;
-
-}
-
-}
-
-// ===============================
-// Init
-// ===============================
-
-window.onload = () => {
-
-loadDepartments();
-
-loadLocations();
-
-loadJobs();
-
-loadTotalJobs();
-
-loadTodayJobs();
-
-loadRecentJobs();
-
-loadNotifications();
-
-loadTelegramUser();
-
-};
-
-</script></body>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiraLink</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #222;
+        }
+
+        .page {
+            display: none;
+            padding: 20px;
+            padding-bottom: 90px;
+        }
+
+        .active {
+            display: block;
+        }
+
+        #splash {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #2563eb, #4f46e5);
+            color: white;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: white;
+            color: #2563eb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 34px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .app-title {
+            font-size: 34px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .app-subtitle {
+            font-size: 16px;
+            opacity: .9;
+            margin-bottom: 40px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: #2563eb;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            opacity: .9;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            border-radius: 16px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 12px rgba(0,0,0,.08);
+        }
+
+        .welcome {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2563eb;
+            margin-bottom: 15px;
+            animation: slideText 10s linear infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes slideText {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-circle {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: #2563eb;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .notification {
+            font-size: 22px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 15px;
+            border-radius: 14px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,.08);
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -3px 12px rgba(0,0,0,.1);
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            font-size: 14px;
+            font-weight: bold;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .nav-btn.active-nav {
+            color: #2563eb;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+
+        .job-card {
+            background: white;
+            padding: 15px;
+            border-radius: 14px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,.08);
+        }
+
+        .job-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: #e0e7ff;
+            color: #2563eb;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="splash">
+        <div class="logo">SL</div>
+        <div class="app-title">SiraLink</div>
+        <div class="app-subtitle">Telegram Employment Ecosystem</div>
+        <button class="btn" onclick="alert('working'); startApp();">GET STARTED</button>
+    </div>
+
+    <div id="home" class="page">
+        <div class="topbar">
+            <div class="profile-circle">U</div>
+            <div class="notification">🔔</div>
+        </div>
+        <div class="welcome">ሰላም Username እንኳን ወደ SiraLink በደህና መጡ</div>
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-number">0</div>
+                <div>Total Jobs</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">0</div>
+                <div>Today's Jobs</div>
+            </div>
+        </div>
+        <div class="card">
+            <h3>Recent Jobs</h3>
+            <p>No jobs available yet.</p>
+        </div>
+        <div class="card">
+            <h3>Quick Actions</h3>
+            <p>Search Jobs, Complete Profile, Get Notifications</p>
+        </div>
+    </div>
+
+    <div id="jobs" class="page">
+        <h2>Jobs</h2>
+        <select id="department">
+            <option>Department</option>
+        </select>
+        <select id="location">
+            <option>Location</option>
+        </select>
+        <select>
+            <option>Education Level</option>
+            <option>Diploma</option>
+            <option>Degree</option>
+            <option>Masters</option>
+            <option>PhD</option>
+        </select>
+        <select>
+            <option>Experience</option>
+            <option>0</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3+</option>
+        </select>
+        <button class="btn">Search Jobs</button>
+        <br><br>
+        <div class="job-card">
+            <div class="job-title">GIS Officer</div>
+            <span class="badge">Geography</span>
+            <span class="badge">Addis Ababa</span>
+            <p>Experience: 0 Year</p>
+        </div>
+    </div>
+
+    <div id="profile" class="page">
+        <h2>My Profile</h2>
+        <input type="text" id="fullName" placeholder="Full Name">
+        <input type="number" id="birthYear" placeholder="Birth Year">
+        <input type="number" id="birthMonth" placeholder="Birth Month">
+        <select id="gender">
+            <option value="">Gender</option>
+            <option>Male</option>
+            <option>Female</option>
+        </select>
+        <input type="text" id="phone" placeholder="Phone Number">
+        <select id="education">
+            <option value="">Educational Level</option>
+            <option>Diploma</option>
+            <option>Degree</option>
+            <option>Masters</option>
+            <option>PhD</option>
+        </select>
+        <input type="text" id="university" placeholder="University / College">
+        <input type="text" id="departmentName" placeholder="Department">
+        <input type="number" id="graduationYear" placeholder="Graduation Year">
+        <select id="experience">
+            <option>0</option>
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4+</option>
+        </select>
+        <input type="file" id="cvFile">
+        <button class="btn" onclick="saveProfile()">Save Profile</button>
+    </div>
+
+    <div id="about" class="page">
+        <h2>About SiraLink</h2>
+        <div class="card">
+            <h3>Our Mission</h3>
+            <p>SiraLink is a Telegram-based employment ecosystem built for Ethiopia. It connects job seekers, recruiters and opportunities through one simple platform.</p>
+        </div>
+        <div class="card">
+            <h3>Contact Us</h3>
+            <p>📞 +251954406366</p>
+            <p>📧 siralink.job@gmail.com</p>
+            <p>💬 @SiralinkSupport</p>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <button class="nav-btn active-nav" onclick="showPage('home', this)">🏠 Home</button>
+        <button class="nav-btn" onclick="showPage('jobs', this)">💼 Jobs</button>
+        <button class="nav-btn" onclick="showPage('profile', this)">👤 Profile</button>
+        <button class="nav-btn" onclick="showPage('about', this)">ℹ️ About</button>
+    </div>
+
+    <script>
+        const SUPABASE_URL = "https://asljgfiiikvgixcftnlf.supabase.co";
+        const SUPABASE_KEY = "sb_publishable_5iraJwEgk7TmWYXyCpc-tw_1Shs32kU";
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        function startApp(){
+            document.getElementById('splash').style.display = 'none';
+            document.getElementById('home').classList.add('active');
+        }
+
+        function showPage(page, btn){
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active');
+            });
+            document.getElementById(page).classList.add('active');
+
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                b.classList.remove('active-nav');
+            });
+            btn.classList.add('active-nav');
+        }
+
+        async function saveProfile(){
+            let telegramId = 123456789; 
+            let telegramUsername = "";
+
+            if(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe.user){
+                telegramId = window.Telegram.WebApp.initDataUnsafe.user.id;
+                telegramUsername = window.Telegram.WebApp.initDataUnsafe.user.username || "";
+            }
+
+            const data = {
+                telegram_id: telegramId,
+                username: telegramUsername,
+                full_name: document.getElementById('fullName').value,
+                birth_year: document.getElementById('birthYear').value ? parseInt(document.getElementById('birthYear').value) : null,
+                birth_month: document.getElementById('birthMonth').value ? parseInt(document.getElementById('birthMonth').value) : null,
+                gender: document.getElementById('gender').value,
+                phone_number: document.getElementById('phone').value,
+                education_level: document.getElementById('education').value,
+                university_college: document.getElementById('university').value,
+                department: document.getElementById('departmentName').value,
+                graduation_year: document.getElementById('graduationYear').value ? parseInt(document.getElementById('graduationYear').value) : null,
+                experience_years: document.getElementById('experience').value ? parseInt(document.getElementById('experience').value) : 0,
+                is_profile_completed: true
+            };
+
+            const { error } = await supabase.from('users').insert([data]);
+
+            if(error){
+                console.error(error);
+                alert('Failed to Save: ' + error.message);
+            } else {
+                alert('Profile Saved successfully!');
+            }
+        }
+
+        // ===============================
+        // Load Dynamic Departments
+        // ===============================
+        async function loadDepartments(){
+            const { data , error } = await supabase.from('jobs').select('department');
+            if(error) return;
+
+            const unique = [...new Set(data.map(x => x.department).filter(Boolean))];
+            const select = document.getElementById('department');
+            
+            unique.forEach(dep => {
+                const option = document.createElement('option');
+                option.value = dep;
+                option.textContent = dep;
+                select.appendChild(option);
+            });
+        }
+
+        // ===============================
+        // Load Dynamic Locations
+        // ===============================
+        async function loadLocations(){
+            const { data , error } = await supabase.from('jobs').select('location');
+            if(error) return;
+
+            const unique = [...new Set(data.map(x => x.location).filter(Boolean))];
+            const select = document.getElementById('location');
+            
+            unique.forEach(loc => {
+                const option = document.createElement('option');
+                option.value = loc;
+                option.textContent = loc;
+                select.appendChild(option);
+            });
+        }
+
+        // ===============================
+        // Load Jobs
+        // ===============================
+        async function loadJobs(){
+            const { data , error } = await supabase.from('jobs').select('*').eq('is_active', true).order('created_at', {ascending: false});
+            if(error) return;
+
+            const jobsPage = document.getElementById('jobs');
+            document.querySelectorAll('.loaded-job').forEach(e => e.remove());
+
+            data.forEach(job => {
+                const div = document.createElement('div');
+                div.className = 'job-card loaded-job';
+                div.innerHTML = `
+                    <div class="job-title">${job.job_title}</div>
+                    <span class="badge">${job.department}</span>
+                    <span class="badge">${job.location}</span>
+                    <p>Education: ${job.education_level || '-'}</p>
+                    <p>Experience: ${job.experience_required || 0} Year</p>
+                    <p>${job.company_name}</p>
+                `;
+                jobsPage.appendChild(div);
+            });
+        }
+
+        // ===============================
+        // Total Jobs
+        // ===============================
+        async function loadTotalJobs(){
+            const { count } = await supabase.from('jobs').select('*', {count: 'exact', head: true});
+            const items = document.querySelectorAll('.stat-number');
+            if(items[0]) items[0].innerText = count || 0;
+        }
+
+        // ===============================
+        // Today's Jobs
+        // ===============================
+        async function loadTodayJobs(){
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            const { data } = await supabase.from('jobs').select('*').gte('created_at', today.toISOString());
+            const items = document.querySelectorAll('.stat-number');
+            if(items[1]) items[1].innerText = data ? data.length : 0;
+        }
+
+        // ===============================
+        // Recent Jobs Feed
+        // ===============================
+        async function loadRecentJobs(){
+            const { data } = await supabase.from('jobs').select('*').order('created_at', {ascending: false}).limit(5);
+            const card = document.querySelector('.card');
+            if(!card || !data) return;
+
+            let html = '<h3>Recent Jobs</h3>';
+            data.forEach(job => {
+                html += `<p>✅ ${job.job_title} (${job.location})</p>`;
+            });
+            card.innerHTML = html;
+        }
+
+        // ===============================
+        // Telegram Username
+        // ===============================
+        function loadTelegramUser(){
+            if(window.Telegram && window.Telegram.WebApp){
+                const user = window.Telegram.WebApp.initDataUnsafe.user;
+                if(user){
+                    const text = `ሰላም ${user.username || user.first_name} እንኳን ወደ SiraLink በደህና መጡ`;
+                    const welcome = document.querySelector('.welcome');
+                    if(welcome) welcome.innerText = text;
+
+                    const profile = document.querySelector('.profile-circle');
+                    if(profile) profile.innerText = user.first_name.charAt(0);
+                }
+            }
+        }
+
+        // ===============================
+        // Notifications
+        // ===============================
+        async function loadNotifications(){
+            const { data } = await supabase.from('notifications').select('*').eq('is_read', false);
+            const bell = document.querySelector('.notification');
+            if(bell && data && data.length > 0){
+                bell.innerHTML = `🔔 ${data.length}`;
+            }
+        }
+
+        // ===============================
+        // Init
+        // ===============================
+        window.onload = () => {
+            loadDepartments();
+            loadLocations();
+            loadJobs();
+            loadTotalJobs();
+            loadTodayJobs();
+            loadRecentJobs();
+            loadNotifications();
+            loadTelegramUser();
+        };
+    </script>
+</body>
 </html>
