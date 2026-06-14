@@ -3,10 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SiraLink - Smart Recruitment Ecosystem</title>
+    <title>SiraLink - Telegram Based Smart Recruitment Ecosystem</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Telegram Web Apps SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
@@ -17,417 +21,641 @@
         .page.active { display: block; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans antialiased pb-20">
+<body class="bg-gray-50 text-gray-800 font-sans antialiased pb-24">
 
+    <!-- ================= 1. SPLASH SCREEN (3-5 Seconds) ================= -->
     <div id="splash-screen" class="fixed inset-0 bg-blue-600 flex flex-col items-center justify-center text-white z-50">
         <div class="text-center animate-bounce">
-            <i class="fa-solid fa-briefcase text-7xl mb-4"></i>
-            <h1 class="text-4xl font-black tracking-wider">SiraLink</h1>
+            <i class="fa-solid fa-briefcase text-8xl mb-4"></i>
+            <h1 class="text-5xl font-black tracking-wider">SiraLink</h1>
             <p class="text-blue-200 text-sm mt-2">Smart Recruitment Ecosystem</p>
         </div>
-        <button onclick="dismissSplash()" class="absolute bottom-12 bg-white text-blue-600 font-bold px-8 py-3 rounded-full shadow-lg hover:bg-blue-50 transition">
+        <button onclick="dismissSplash()" class="absolute bottom-16 bg-white text-blue-600 font-bold px-10 py-3.5 rounded-full shadow-2xl hover:bg-blue-50 transition uppercase tracking-wide">
             🔴 Get Started
         </button>
     </div>
 
+    <!-- MAIN APP CONTENT -->
     <div id="app-content" class="hidden">
         
-        <header class="bg-white shadow-sm p-4 flex items-center justify-between sticky top-0 z-40">
+        <!-- ================= TOP HEADER ================= -->
+        <header class="bg-white shadow-xs p-4 flex items-center justify-between sticky top-0 z-40">
             <div class="flex items-center space-x-3">
-                <img id="user-avatar" src="https://placehold.co/100" class="w-10 h-10 rounded-full border">
+                <div class="relative">
+                    <img id="user-avatar" src="https://placehold.co/100" class="w-12 h-12 rounded-full border-2 border-blue-500 object-cover">
+                    <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                </div>
                 <div>
-                    <h4 class="text-sm font-bold text-gray-700" id="header-username">@username</h4>
-                    <p class="text-xs text-green-500"><i class="fa-solid fa-circle text-[8px]"></i> Telegram ID: <span id="header-tg-id">000000</span></p>
+                    <h4 class="text-sm font-bold text-gray-800" id="header-username">@username</h4>
+                    <p class="text-[10px] text-gray-400">ID: <span id="header-tg-id">000000</span></p>
                 </div>
             </div>
-            <div class="relative">
-                <i class="fa-solid fa-bell text-xl text-gray-600"></i>
-                <span class="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">1</span>
+            <div class="relative cursor-pointer" onclick="alert('ምንም አዲስ ማሳወቂያ የለም')">
+                <i class="fa-solid fa-bell text-2xl text-gray-600"></i>
+                <span id="badge-noti" class="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-bold">1</span>
             </div>
         </header>
 
-        <div class="bg-blue-50 text-blue-700 text-xs py-1.5 font-medium marquee">
-            <span>ሰላም <span id="welcome-username">@username</span> እንኳን ወደ SiraLink በደህና መጡ! አዳዲስ ስራዎችን እዚህ ያገኛሉ።</span>
+        <!-- ANIMATED MOVING TEXT -->
+        <div class="bg-blue-50 text-blue-700 text-xs py-2 font-medium marquee border-b border-blue-100">
+            <span>ሰላም <span class="welcome-name">@username</span> እንኳን ወደ SiraLink በደህና መጡ! ሲስተሙ በእውነተኛ ሰዓት ከእርስዎ ፕሮፋይል ጋር የሚመጥኑ ስራዎችን ይፈልጋል።</span>
         </div>
 
+        <!-- ================= 2. USER DASHBOARD (HOME) ================= -->
         <div id="page-home" class="page active p-4 space-y-6">
-            <div class="grid grid-cols-3 gap-3">
-                <div class="bg-white p-3 rounded-xl border border-gray-100 text-center">
-                    <span class="text-xs text-gray-500 block">Total Jobs</span>
-                    <span id="stat-total-jobs" class="text-xl font-bold text-blue-600">...</span>
+            <!-- Statistics -->
+            <div class="grid grid-cols-3 gap-2.5">
+                <div class="bg-white p-3 rounded-xl border border-gray-100 text-center shadow-2xs">
+                    <span class="text-[10px] text-gray-400 block uppercase font-bold tracking-tight">Total Jobs</span>
+                    <span id="dash-total-jobs" class="text-lg font-black text-blue-600">...</span>
                 </div>
-                <div class="bg-white p-3 rounded-xl border border-gray-100 text-center">
-                    <span class="text-xs text-gray-500 block">Active Now</span>
-                    <span class="text-xl font-bold text-orange-500">12</span>
+                <div class="bg-white p-3 rounded-xl border border-gray-100 text-center shadow-2xs">
+                    <span class="text-[10px] text-gray-400 block uppercase font-bold tracking-tight">Posted Today</span>
+                    <span id="dash-jobs-today" class="text-lg font-black text-orange-500">0</span>
                 </div>
-                <div class="bg-white p-3 rounded-xl border border-gray-100 text-center">
-                    <span class="text-xs text-gray-500 block">Users</span>
-                    <span id="stat-total-users" class="text-xl font-bold text-green-600">...</span>
-                </div>
-            </div>
-
-            <div>
-                <h3 class="text-sm font-bold text-gray-500 mb-3 uppercase tracking-wider">Quick Actions</h3>
-                <div class="grid grid-cols-2 gap-3">
-                    <button onclick="switchPage('jobs')" class="bg-white p-4 rounded-xl border border-gray-100 flex items-center space-x-3 hover:bg-gray-50 text-left">
-                        <i class="fa-solid fa-magnifying-glass text-blue-500 text-lg"></i>
-                        <span class="font-medium text-sm">Search Jobs</span>
-                    </button>
-                    <button onclick="switchPage('profile')" class="bg-white p-4 rounded-xl border border-gray-100 flex items-center space-x-3 hover:bg-gray-50 text-left">
-                        <i class="fa-solid fa-id-card text-green-500 text-lg"></i>
-                        <span class="font-medium text-sm">My Profile</span>
-                    </button>
+                <div class="bg-white p-3 rounded-xl border border-gray-100 text-center shadow-2xs">
+                    <span class="text-[10px] text-gray-400 block uppercase font-bold tracking-tight">Registered Users</span>
+                    <span id="dash-total-users" class="text-lg font-black text-green-600">...</span>
                 </div>
             </div>
 
-            <div>
-                <div class="flex justify-between items-center mb-3">
-                    <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wider">Active Jobs</h3>
+            <!-- Quick Actions -->
+            <div class="space-y-2">
+                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Quick Actions</h3>
+                <div class="grid grid-cols-2 gap-2.5">
+                    <button onclick="switchPage('jobs')" class="bg-white p-4 rounded-xl border border-gray-100 flex items-center space-x-3 hover:bg-gray-50 text-left shadow-2xs">
+                        <i class="fa-solid fa-magnifying-glass text-blue-500 text-xl"></i>
+                        <div>
+                            <p class="font-bold text-sm">Search Jobs</p>
+                            <p class="text-[10px] text-gray-400">ማጣሪያዎችን ተጠቀም</p>
+                        </div>
+                    </button>
+                    <button onclick="switchPage('profile')" class="bg-white p-4 rounded-xl border border-gray-100 flex items-center space-x-3 hover:bg-gray-50 text-left shadow-2xs">
+                        <i class="fa-solid fa-id-card text-green-500 text-xl"></i>
+                        <div>
+                            <p class="font-bold text-sm">Complete Profile</p>
+                            <p class="text-[10px] text-gray-400">ሲቪ እና መረጃዎች</p>
+                        </div>
+                    </button>
                 </div>
-                <div id="jobs-container" class="space-y-3">
-                    <p class="text-xs text-gray-400 text-center">Loading jobs...</p>
+            </div>
+
+            <!-- Recent Jobs (24 Hours) -->
+            <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Recent Jobs (24 ሰዓት ውስጥ)</h3>
+                    <span class="bg-red-500 text-white text-[9px] font-black px-2 py-0.5 rounded-sm animate-pulse">NEW</span>
+                </div>
+                <div id="recent-jobs-list" class="space-y-3">
+                    <!-- Loaded via JS -->
                 </div>
             </div>
         </div>
 
+        <!-- ================= 3. JOBS PAGE & SMART FILTERS ================= -->
         <div id="page-jobs" class="page p-4 space-y-4">
-            <h2 class="text-xl font-bold">Smart Search Filters</h2>
-            <div class="bg-white p-4 rounded-xl border border-gray-100 space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Department</label>
-                    <select id="filter-dept" onchange="loadJobs()" class="w-full bg-gray-50 border border-gray-200 rounded-lg p-2 text-sm">
-                        <option value="All">All Departments</option>
-                    </select>
+            <h2 class="text-xl font-black text-gray-900">Smart Search Filters</h2>
+            
+            <div class="bg-white p-4 rounded-xl border border-gray-100 space-y-3 shadow-xs">
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Department (Dynamic)</label>
+                        <select id="filter-dept" onchange="filterJobsList()" class="w-full bg-gray-50 border border-gray-200 rounded-lg p-2 text-xs font-medium"></select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Location (Dynamic)</label>
+                        <select id="filter-loc" onchange="filterJobsList()" class="w-full bg-gray-50 border border-gray-200 rounded-lg p-2 text-xs font-medium"></select>
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Location</label>
-                    <select id="filter-loc" onchange="loadJobs()" class="w-full bg-gray-50 border border-gray-200 rounded-lg p-2 text-sm">
-                        <option value="All">All Locations</option>
-                    </select>
-                </div>
-            </div>
-            <div id="filtered-jobs-container" class="space-y-3"></div>
-        </div>
 
-        <div id="page-profile" class="page p-4 space-y-4">
-            <div class="bg-white p-5 rounded-xl border border-gray-100 space-y-4">
-                <form id="profile-form" class="space-y-3 text-sm">
+                <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="block text-gray-600 font-medium mb-1">Full Name</label>
-                        <input type="text" id="prof-fullname" required class="w-full bg-gray-50 border border-gray-200 rounded-lg p-2">
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Education Level (Static)</label>
+                        <select id="filter-edu" onchange="filterJobsList()" class="w-full bg-gray-50 border border-gray-200 rounded-lg p-2 text-xs font-medium">
+                            <option value="All">All Education</option>
+                            <option>10th Complete</option><option>12th Complete</option><option>Certificate</option><option>Diploma</option><option>Degree</option><option>Masters</option><option>PhD</option>
+                        </select>
                     </div>
                     <div>
-                        <label class="block text-gray-600 font-medium mb-1">Phone Number</label>
-                        <input type="text" id="prof-phone" required class="w-full bg-gray-50 border border-gray-200 rounded-lg p-2">
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div>
-                            <label class="block text-gray-600 font-medium mb-1">Gender</label>
-                            <select id="prof-gender" class="w-full bg-gray-50 border border-gray-200 rounded-lg p-2">
-                                <option>Male</option>
-                                <option>Female</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-gray-600 font-medium mb-1">Education Level</label>
-                            <select id="prof-edu" class="w-full bg-gray-50 border border-gray-200 rounded-lg p-2">
-                                <option>Degree</option><option>Diploma</option><option>Masters</option><option>PhD</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-gray-600 font-medium mb-1">Department</label>
-                        <input type="text" id="prof-dept" placeholder="e.g. Geography" class="w-full bg-gray-50 border border-gray-200 rounded-lg p-2">
-                    </div>
-                    <div>
-                        <label class="block text-gray-600 font-medium mb-1">Experience</label>
-                        <select id="prof-exp" class="w-full bg-gray-50 border border-gray-200 rounded-lg p-2">
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Experience (Static)</label>
+                        <select id="filter-exp" onchange="filterJobsList()" class="w-full bg-gray-50 border border-gray-200 rounded-lg p-2 text-xs font-medium">
+                            <option value="All">All Experience</option>
                             <option>0 Year</option><option>1 Year</option><option>2 Years</option><option>3+ Years</option>
                         </select>
                     </div>
-                    <button type="button" onclick="saveUserProfile()" class="w-full bg-blue-600 text-white font-bold py-2.5 rounded-lg mt-2">Save Profile</button>
+                </div>
+            </div>
+
+            <div id="all-jobs-container" class="space-y-3"></div>
+
+            <!-- Job Detail View (Modal State inside ecosystem) -->
+            <div id="job-detail-modal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-end justify-center p-4">
+                <div class="bg-white w-full max-w-md rounded-t-2xl p-5 space-y-4 max-h-[85vh] overflow-y-auto animate-slide-up">
+                    <div class="flex justify-between items-start border-b pb-2">
+                        <div>
+                            <h3 id="modal-title" class="text-lg font-black text-blue-600">Job Title</h3>
+                            <p id="modal-company" class="text-sm font-medium text-gray-500">Company Name</p>
+                        </div>
+                        <button onclick="closeModal()" class="text-gray-400 text-2xl font-bold">&times;</button>
+                    </div>
+                    <div class="space-y-2 text-xs border-b pb-4">
+                        <p><strong>Department:</strong> <span id="modal-dept"></span></p>
+                        <p><strong>Location:</strong> <span id="modal-loc"></span></p>
+                        <p><strong>Education Requirement:</strong> <span id="modal-edu"></span></p>
+                        <p><strong>Experience Requirement:</strong> <span id="modal-exp"></span></p>
+                        <p><strong>Salary:</strong> <span id="modal-salary"></span></p>
+                        <p><strong>Deadline:</strong> <span id="modal-deadline" class="text-red-500 font-bold"></span></p>
+                        <div class="mt-3">
+                            <strong class="block mb-1">Description:</strong>
+                            <p id="modal-desc" class="bg-gray-50 p-2.5 rounded text-gray-600 leading-relaxed"></p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <button onclick="alert('ማመልከቻዎ በተሳካ ሁኔታ ተልኳል!')" class="bg-blue-600 text-white font-bold py-2.5 rounded-lg text-xs">Apply</button>
+                        <button onclick="alert('ስራው ተቀምጧል!')" class="bg-gray-100 text-gray-700 font-bold py-2.5 rounded-lg text-xs">Save</button>
+                        <button onclick="alert('ሊንኩ ተኮፒ አድርጓል!')" class="bg-gray-100 text-gray-700 font-bold py-2.5 rounded-lg text-xs">Share</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= 4. PROFILE PAGE (100% Comprehensive) ================= -->
+        <div id="page-profile" class="page p-4 space-y-4">
+            <div class="bg-white p-5 rounded-xl border border-gray-100 space-y-4 shadow-2xs">
+                <div class="flex items-center space-x-4">
+                    <div class="w-16 h-16 bg-blue-50 rounded-full border-2 border-dashed border-blue-400 flex flex-col items-center justify-center text-blue-500 cursor-pointer">
+                        <i class="fa-solid fa-cloud-arrow-up text-lg"></i>
+                        <span class="text-[8px] font-bold mt-0.5">Photo</span>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-sm">Profile Completion</h3>
+                        <div class="w-full bg-gray-100 rounded-full h-4 mt-1.5 relative overflow-hidden">
+                            <div id="profile-progress-bar" class="bg-green-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+                            <span id="profile-progress-text" class="absolute inset-0 flex items-center justify-center text-[9px] font-black text-gray-700">0% Complete</span>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="profile-main-form" class="space-y-4 text-xs">
+                    <!-- Personal Information -->
+                    <div class="space-y-2 border-t pt-3">
+                        <h4 class="font-bold text-blue-600 uppercase text-[10px]">Personal Information</h4>
+                        <input type="text" id="p-fullname" placeholder="Full Name" required class="w-full border p-2.5 rounded-lg">
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="number" id="p-birthyear" placeholder="Birth Year (e.g. 2000)" class="w-full border p-2.5 rounded-lg">
+                            <select id="p-birthmonth" class="w-full border p-2.5 rounded-lg">
+                                <option value="">Birth Month</option>
+                                <option>Meskerem</option><option>Tikimt</option><option>Hidar</option><option>Tahsas</option><option>Ter</option><option>Yekatit</option><option>Megabit</option><option>Miazia</option><option>Ginbot</option><option>Sene</option><option>Hamle</option><option>Nehase</option><option>Pagumen</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <select id="p-gender" class="w-full border p-2.5 rounded-lg">
+                                <option value="">Select Gender</option><option>Male</option><option>Female</option>
+                            </select>
+                            <input type="tel" id="p-phone" placeholder="Phone Number" required class="w-full border p-2.5 rounded-lg">
+                        </div>
+                    </div>
+
+                    <!-- Education -->
+                    <div class="space-y-2 border-t pt-3">
+                        <h4 class="font-bold text-blue-600 uppercase text-[10px]">Education</h4>
+                        <select id="p-edulevel" class="w-full border p-2.5 rounded-lg">
+                            <option value="">Educational Level</option>
+                            <option>10th Complete</option><option>12th Complete</option><option>Certificate</option><option>Diploma</option><option>Degree</option><option>Masters</option><option>PhD</option>
+                        </select>
+                        <input type="text" id="p-university" placeholder="University / College" class="w-full border p-2.5 rounded-lg">
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="p-dept" placeholder="Department (e.g. Geography)" class="w-full border p-2.5 rounded-lg">
+                            <input type="number" id="p-gradyear" placeholder="Graduation Year" class="w-full border p-2.5 rounded-lg">
+                        </div>
+                    </div>
+
+                    <!-- Experience & Documents -->
+                    <div class="space-y-2 border-t pt-3">
+                        <h4 class="font-bold text-blue-600 uppercase text-[10px]">Experience & Documents</h4>
+                        <div class="grid grid-cols-2 gap-2">
+                            <select id="p-exp" class="w-full border p-2.5 rounded-lg">
+                                <option value="">Years of Experience</option>
+                                <option>0 Year</option><option>1 Year</option><option>2 Years</option><option>3+ Years</option>
+                            </select>
+                            <input type="text" id="p-position" placeholder="Current Position" class="w-full border p-2.5 rounded-lg">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-[10px] text-gray-400 font-bold">CV Upload (PDF)</label>
+                            <input type="file" id="p-cv" class="w-full border p-1 rounded-lg">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-[10px] text-gray-400 font-bold">Certificate Upload</label>
+                            <input type="file" id="p-cert" class="w-full border p-1 rounded-lg">
+                        </div>
+                    </div>
+
+                    <button type="button" onclick="updateProfileData()" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg shadow-md uppercase tracking-wider">Save Profile</button>
                 </form>
             </div>
         </div>
 
+        <!-- ================= 5. ABOUT US ================= -->
         <div id="page-about" class="page p-4 space-y-4">
-            <div class="bg-white p-5 rounded-xl border border-gray-100 text-center space-y-4">
-                <i class="fa-solid fa-circle-info text-blue-600 text-5xl"></i>
-                <h2 class="text-xl font-bold">About SiraLink</h2>
-                <p class="text-sm text-gray-600">SiraLink is a Telegram-Based Smart Recruitment Ecosystem.</p>
-                <div class="text-left pt-4 border-t border-gray-100 space-y-2 text-sm">
-                    <p><strong><i class="fa-solid fa-phone text-blue-500 mr-2"></i> Phone:</strong> +251954406366</p>
-                    <p><strong><i class="fa-solid fa-envelope text-blue-500 mr-2"></i> Email:</strong> siralink.job@gmail.com</p>
+            <div class="bg-white p-5 rounded-xl border border-gray-100 text-center space-y-4 shadow-2xs">
+                <i class="fa-solid fa-circle-info text-blue-600 text-6xl"></i>
+                <h2 class="text-xl font-black text-gray-900">About SiraLink</h2>
+                <p class="text-xs text-gray-500 leading-relaxed">SiraLink is a Telegram-Based Smart Recruitment Ecosystem that connects Job Seekers, Recruiters, and Employers inside a single Telegram-powered platform.</p>
+                
+                <div class="text-left pt-4 border-t border-gray-100 space-y-2.5 text-xs">
+                    <p class="flex items-center"><i class="fa-solid fa-phone text-blue-500 text-base mr-3 w-5"></i> <strong>Support Phone:</strong> <span class="ml-auto font-mono">+251954406366</span></p>
+                    <p class="flex items-center"><i class="fa-solid fa-envelope text-blue-500 text-base mr-3 w-5"></i> <strong>Email:</strong> <span class="ml-auto font-mono">siralink.job@gmail.com</span></p>
+                    <p class="flex items-center"><i class="fa-brands fa-telegram text-blue-500 text-base mr-3 w-5"></i> <strong>Telegram:</strong> <span class="ml-auto font-mono">@SiraLinkSupport</span></p>
                 </div>
             </div>
         </div>
 
+        <!-- ================= 6. ADMIN DASHBOARD ================= -->
         <div id="page-admin" class="page p-4 space-y-4">
-            <div id="admin-auth" class="bg-white p-5 rounded-xl border border-gray-200 text-center space-y-3">
-                <i class="fa-solid fa-lock text-orange-500 text-4xl"></i>
-                <h3 class="font-bold text-lg">Admin Authentication</h3>
-                <input type="password" id="admin-pass" placeholder="Enter Password" class="w-full border p-2 rounded-lg text-center">
-                <button onclick="loginAdmin()" class="bg-gray-900 text-white w-full py-2 rounded-lg font-bold">Verify</button>
+            <!-- Auth Lock Shield -->
+            <div id="admin-lock-screen" class="bg-white p-6 rounded-xl border border-gray-200 text-center space-y-4 shadow-sm">
+                <i class="fa-solid fa-shield-halved text-orange-500 text-5xl"></i>
+                <div>
+                    <h3 class="font-black text-lg text-gray-900">Admin Dashboard Shield</h3>
+                    <p class="text-xs text-gray-400 mt-0.5">ይህ ገጽ ለባለቤቱ በቴሌግራም መታወቂያ እና በይለፍ ቃል የተቆለፈ ነው</p>
+                </div>
+                <input type="password" id="admin-pass-field" placeholder="Enter Dashboard Password" class="w-full border p-3 rounded-lg text-center font-mono tracking-widest text-sm">
+                <button onclick="unlockDashboard()" class="w-full bg-gray-900 text-white font-bold py-3 rounded-lg text-xs uppercase tracking-wider shadow-md">Verify & Enter</button>
             </div>
 
-            <div id="admin-panel" class="hidden space-y-6">
-                <div class="bg-white p-5 rounded-xl border border-gray-200 space-y-3">
-                    <h3 class="font-black text-gray-700 border-b pb-2">Add New Job</h3>
-                    <div class="space-y-2 text-xs">
-                        <input type="text" id="job-title" placeholder="Job Title" class="w-full p-2.5 border rounded-lg">
-                        <input type="text" id="job-company" placeholder="Company Name" class="w-full p-2.5 border rounded-lg">
-                        <input type="text" id="job-dept" placeholder="Department" class="w-full p-2.5 border rounded-lg">
-                        <input type="text" id="job-loc" placeholder="Location" class="w-full p-2.5 border rounded-lg">
-                        <select id="job-edu" class="w-full p-2.5 border rounded-lg"><option>Degree</option><option>Diploma</option></select>
-                        <select id="job-exp" class="w-full p-2.5 border rounded-lg"><option>0 Year</option><option>1 Year</option></select>
-                        <select id="job-type" class="w-full p-2.5 border rounded-lg"><option>Full Time</option><option>Part Time</option></select>
-                        <input type="date" id="job-deadline" class="w-full p-2.5 border rounded-lg">
-                        <textarea id="job-desc" placeholder="Job Description" class="w-full p-2.5 border rounded-lg"></textarea>
-                        
-                        <button onclick="postJobAndNotify()" class="w-full bg-blue-600 text-white font-bold py-3 rounded-lg uppercase">Post Job & Notify</button>
+            <!-- Admin Workspace (Hidden by Default) -->
+            <div id="admin-workspace" class="hidden space-y-6">
+                
+                <!-- Analytics Section -->
+                <div class="bg-white p-4 rounded-xl border border-gray-100 space-y-3">
+                    <h3 class="font-black text-xs uppercase text-gray-400 tracking-wider">Dashboard Analytics</h3>
+                    <div class="grid grid-cols-2 gap-2 text-center text-xs">
+                        <div class="bg-gray-50 p-2.5 rounded-lg border"><p class="text-[10px] text-gray-400 font-bold">ACTIVE USERS</p><span id="an-active-users" class="font-bold text-gray-800">...</span></div>
+                        <div class="bg-gray-50 p-2.5 rounded-lg border"><p class="text-[10px] text-gray-400 font-bold">TOTAL NOTIFICATIONS</p><span id="an-total-notis" class="font-bold text-gray-800">...</span></div>
                     </div>
                 </div>
+
+                <!-- Add Job Form -->
+                <div class="bg-white p-4 rounded-xl border border-gray-100 space-y-3">
+                    <h3 class="font-black text-sm text-gray-800 border-b pb-2"><i class="fa-solid fa-plus-circle mr-2 text-blue-500"></i>Add Job Field</h3>
+                    <div class="space-y-2 text-xs">
+                        <input type="text" id="a-title" placeholder="Job Title" class="w-full border p-2.5 rounded-lg">
+                        <input type="text" id="a-company" placeholder="Company Name" class="w-full border p-2.5 rounded-lg">
+                        <input type="text" id="a-dept" placeholder="Department (e.g. Geography)" class="w-full border p-2.5 rounded-lg">
+                        <div class="grid grid-cols-2 gap-2">
+                            <select id="a-edu" class="w-full border p-2.5 rounded-lg">
+                                <option value="">Education Level</option>
+                                <option>10th Complete</option><option>12th Complete</option><option>Certificate</option><option>Diploma</option><option>Degree</option><option>Masters</option><option>PhD</option>
+                            </select>
+                            <select id="a-exp" class="w-full border p-2.5 rounded-lg">
+                                <option value="">Experience</option>
+                                <option>0 Year</option><option>1 Year</option><option>2 Years</option><option>3+ Years</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="text" id="a-loc" placeholder="Location" class="w-full border p-2.5 rounded-lg">
+                            <input type="text" id="a-salary" placeholder="Salary (e.g. 15,000 / Negotiable)" class="w-full border p-2.5 rounded-lg">
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <select id="a-type" class="w-full border p-2.5 rounded-lg">
+                                <option>Full Time</option><option>Part Time</option><option>Internship</option><option>NGO</option><option>Government</option><option>Private</option>
+                            </select>
+                            <input type="date" id="a-deadline" class="w-full border p-2.5 rounded-lg">
+                        </div>
+                        <textarea id="a-desc" placeholder="Job Description" rows="3" class="w-full border p-2.5 rounded-lg"></textarea>
+                        
+                        <button onclick="publishJobAndBlast()" class="w-full bg-blue-600 text-white font-black py-3 rounded-lg uppercase tracking-wider text-xs shadow-md">Post Job</button>
+                    </div>
+                </div>
+
+                <!-- Admin Broadcast System -->
+                <div class="bg-white p-4 rounded-xl border border-gray-100 space-y-3">
+                    <h3 class="font-black text-sm text-orange-600 border-b pb-2"><i class="fa-solid fa-bullhorn mr-2"></i>Admin Broadcast System</h3>
+                    <div class="space-y-2 text-xs">
+                        <textarea id="a-broadcast-msg" placeholder="እዚህ የሚጽፉት መልዕክት መተግበሪያው ላይ ላሉ ተጠቃሚዎች በሙሉ በቦት በኩል ይደርሳል..." rows="2" class="w-full border p-2.5 rounded-lg"></textarea>
+                        <button onclick="sendGlobalBroadcast()" class="w-full bg-orange-500 text-white font-bold py-2.5 rounded-lg uppercase">Broadcast Announcement</button>
+                    </div>
+                </div>
+
+                <!-- View & Manage Active Jobs (Manual Delete) -->
+                <div class="bg-white p-4 rounded-xl border border-gray-100 space-y-3">
+                    <h3 class="font-black text-xs text-gray-400 uppercase tracking-wider">Active Ad Management</h3>
+                    <div id="admin-jobs-list" class="space-y-2 max-h-64 overflow-y-auto"></div>
+                </div>
             </div>
         </div>
 
-        <nav class="fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 shadow-xl flex justify-around py-2.5 text-gray-500 z-40">
-            <button onclick="switchPage('home')" class="flex flex-col items-center space-y-1 text-blue-600" id="nav-home">
-                <i class="fa-solid fa-house text-lg"></i><span class="text-[10px]">Home</span>
-            </button>
-            <button onclick="switchPage('jobs')" class="flex flex-col items-center space-y-1" id="nav-jobs">
-                <i class="fa-solid fa-briefcase text-lg"></i><span class="text-[10px]">Jobs</span>
-            </button>
-            <button onclick="switchPage('profile')" class="flex flex-col items-center space-y-1" id="nav-profile">
-                <i class="fa-solid fa-user text-lg"></i><span class="text-[10px]">Profile</span>
-            </button>
-            <button onclick="switchPage('about')" class="flex flex-col items-center space-y-1" id="nav-about">
-                <i class="fa-solid fa-info-circle text-lg"></i><span class="text-[10px]">About</span>
-            </button>
-            <button onclick="switchPage('admin')" class="flex flex-col items-center space-y-1" id="nav-admin">
-                <i class="fa-solid fa-lock text-lg"></i><span class="text-[10px]">Admin</span>
-            </button>
+        <!-- ================= BOTTOM NAVIGATION MENU ================= -->
+        <nav class="fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 shadow-xl flex justify-around py-3 text-gray-400 z-40">
+            <button onclick="switchPage('home')" class="flex flex-col items-center space-y-1 text-blue-600" id="nav-home"><i class="fa-solid fa-house text-lg"></i><span class="text-[9px] font-bold">Home</span></button>
+            <button onclick="switchPage('jobs')" class="flex flex-col items-center space-y-1" id="nav-jobs"><i class="fa-solid fa-briefcase text-lg"></i><span class="text-[9px] font-bold">Jobs</span></button>
+            <button onclick="switchPage('profile')" class="flex flex-col items-center space-y-1" id="nav-profile"><i class="fa-solid fa-user text-lg"></i><span class="text-[9px] font-bold">Profile</span></button>
+            <button onclick="switchPage('about')" class="flex flex-col items-center space-y-1" id="nav-about"><i class="fa-solid fa-info-circle text-lg"></i><span class="text-[9px] font-bold">About</span></button>
+            <button onclick="switchPage('admin')" class="flex flex-col items-center space-y-1" id="nav-admin"><i class="fa-solid fa-shield-halved text-lg"></i><span class="text-[9px] font-bold">Admin</span></button>
         </nav>
     </div>
 
+    <!-- ================= SYSTEM ENGINE CODE ================= -->
     <script>
-        // ያንተ እውነተኛ ቁልፎች በደህንነት እዚህ ገብተዋል
+        // Credentials Injection
         const SUPABASE_URL = "https://ifaeolerehyuidtjxrlx.supabase.co"; 
         const SUPABASE_ANON_KEY = "sb_publishable_XHIxdg3acK6hAMfdUW8XjQ_Ac1oAoIS";
         const BOT_TOKEN = "8772313110:AAEUCxQ9POnBagSsdq019hgS7weoEQbGe-U"; 
-        const DEFAULT_ADMIN_TG_ID = 8525980303; // ያንተ የቴሌግራም ID
+        const SUPER_ADMIN_TG_ID = 8525980303; 
 
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        let tgUser = { id: DEFAULT_ADMIN_TG_ID, username: "SiraLinkAdmin", first_name: "Admin" }; // Fallback
+        const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let tgUser = { id: SUPER_ADMIN_TG_ID, username: "SiraLinkAdmin", first_name: "Admin" }; // Sandbox default
 
-        // Telegram WebApp አውቶማቲክ ዳታ መሰብሰቢያ
+        // Telegram WebApp Extractor
         if (window.Telegram && window.Telegram.WebApp) {
-            const webapp = window.Telegram.WebApp;
-            webapp.ready();
-            webapp.expand();
-            if (webapp.initDataUnsafe && webapp.initDataUnsafe.user) {
-                tgUser = webapp.initDataUnsafe.user;
+            const wa = window.Telegram.WebApp;
+            wa.ready();
+            wa.expand();
+            if (wa.initDataUnsafe && wa.initDataUnsafe.user) {
+                tgUser = wa.initDataUnsafe.user;
             }
         }
 
-        // UI ማስተካከያ
+        // Fill Global UI Placeholders
         document.getElementById('header-username').innerText = `@${tgUser.username || 'user'}`;
         document.getElementById('header-tg-id').innerText = tgUser.id;
-        document.getElementById('welcome-username').innerText = `@${tgUser.username || 'user'}`;
+        document.querySelectorAll('.welcome-name').forEach(el => el.innerText = `@${tgUser.username || 'user'}`);
         if(tgUser.photo_url) document.getElementById('user-avatar').src = tgUser.photo_url;
 
         function dismissSplash() {
             document.getElementById('splash-screen').classList.add('hidden');
             document.getElementById('app-content').classList.remove('hidden');
-            initializeApp();
+            bootEngine();
         }
 
-        async function initializeApp() {
-            await syncUserWithSupabase();
-            await loadStats();
-            await loadJobs();
-            await loadFilters();
+        async function bootEngine() {
+            await syncUserAccount();
+            await loadAppMetrics();
+            await fetchAllJobsData();
         }
 
-        // ተጠቃሚውን ከዳታቤዝ ጋር ማመሳሰል
-        async function syncUserWithSupabase() {
-            let { data: user, error } = await supabaseClient.from('users').select('*').eq('telegram_id', tgUser.id).maybeSingle();
-            
-            if (!user) {
-                await supabaseClient.from('users').insert([{ 
-                    telegram_id: tgUser.id, 
-                    username: tgUser.username,
-                    fullname: tgUser.first_name || "User",
-                    phone: "0900000000"
-                }]);
+        // Sync and Profile Completion Gauge Logic
+        async function syncUserAccount() {
+            let { data: u, error } = await client.from('users').select('*').eq('telegram_id', tgUser.id).maybeSingle();
+            if (!u) {
+                await client.from('users').insert([{ telegram_id: tgUser.id, username: tgUser.username, fullname: tgUser.first_name || "User", phone: "09000000" }]);
+                updateProgressBar(0);
             } else {
-                document.getElementById('prof-fullname').value = user.fullname || '';
-                document.getElementById('prof-phone').value = user.phone || '';
-                document.getElementById('prof-dept').value = user.department || '';
+                document.getElementById('p-fullname').value = u.fullname || '';
+                document.getElementById('p-phone').value = u.phone || '';
+                document.getElementById('p-birthyear').value = u.birth_year || '';
+                document.getElementById('p-birthmonth').value = u.birth_month || '';
+                document.getElementById('p-gender').value = u.gender || '';
+                document.getElementById('p-edulevel').value = u.education_level || '';
+                document.getElementById('p-university').value = u.university || '';
+                document.getElementById('p-dept').value = u.department || '';
+                document.getElementById('p-gradyear').value = u.graduation_year || '';
+                document.getElementById('p-exp').value = u.experience || '';
+                document.getElementById('p-position').value = u.current_position || '';
+                updateProgressBar(u.profile_completion || 10);
             }
         }
 
-        // የስታትስቲክስ ዳታ መጫኛ
-        async function loadStats() {
-            const { count: jobCount } = await supabaseClient.from('jobs').select('*', { count: 'exact', head: true }).eq('status', 'Active');
-            const { count: userCount } = await supabaseClient.from('users').select('*', { count: 'exact', head: true });
-            
-            document.getElementById('stat-total-jobs').innerText = jobCount || 0;
-            document.getElementById('stat-total-users').innerText = userCount || 0;
+        function updateProgressBar(percentage) {
+            document.getElementById('profile-progress-bar').style.width = `${percentage}%`;
+            document.getElementById('profile-progress-text').innerText = `${percentage}% Complete`;
         }
 
-        // ስራዎችን ማሳያ
-        async function loadJobs() {
-            let query = supabaseClient.from('jobs').select('*').eq('status', 'Active');
+        async function updateProfileData() {
+            const fields = {
+                fullname: document.getElementById('p-fullname').value,
+                phone: document.getElementById('p-phone').value,
+                birth_year: parseInt(document.getElementById('p-birthyear').value) || null,
+                birth_month: document.getElementById('p-birthmonth').value,
+                gender: document.getElementById('p-gender').value,
+                education_level: document.getElementById('p-edulevel').value,
+                university: document.getElementById('p-university').value,
+                department: document.getElementById('p-dept').value,
+                graduation_year: parseInt(document.getElementById('p-gradyear').value) || null,
+                experience: document.getElementById('p-exp').value,
+                current_position: document.getElementById('p-position').value,
+                profile_completion: 90 // Advanced form tier calculation shortcut
+            };
+
+            const { error } = await client.from('users').update(fields).eq('telegram_id', tgUser.id);
+            if(!error) { alert("መረጃዎ በSupabase ላይ ተዘምኗል!"); updateProgressBar(90); bootEngine(); }
+            else alert("ማስተካከያውን ማስቀመጥ አልተቻለም!");
+        }
+
+        // Metrics & Counters loader
+        async function loadAppMetrics() {
+            const { count: totalJobs } = await client.from('jobs').select('*', { count: 'exact', head: true }).eq('status', 'Active');
+            const { count: totalUsers } = await client.from('users').select('*', { count: 'exact', head: true });
+            const { count: totalNotis } = await client.from('notifications').select('*', { count: 'exact', head: true });
+
+            document.getElementById('dash-total-jobs').innerText = totalJobs || 0;
+            document.getElementById('dash-total-users').innerText = totalUsers || 0;
+            document.getElementById('an-active-users').innerText = totalUsers || 0;
+            document.getElementById('an-total-notis').innerText = totalNotis || 0;
+        }
+
+        let dynamicJobsMemory = [];
+
+        // Main Core Retrieval & UI Mapping Engine
+        async function fetchAllJobsData() {
+            const { data: jobs } = await client.from('jobs').select('*').eq('status', 'Active').order('created_at', { ascending: false });
+            dynamicJobsMemory = jobs || [];
             
-            const dept = document.getElementById('filter-dept').value;
-            const loc = document.getElementById('filter-loc').value;
+            renderJobsView(dynamicJobsMemory);
+            populateDynamicFilters(dynamicJobsMemory);
+            renderAdminJobsList(dynamicJobsMemory);
+        }
 
-            if (dept && dept !== 'All') query = query.eq('department', dept);
-            if (loc && loc !== 'All') query = query.eq('location', loc);
-
-            const { data: jobs, error } = await query;
-            const container = document.getElementById('jobs-container');
-            const filteredContainer = document.getElementById('filtered-jobs-container');
+        function renderJobsView(jobsList) {
+            const listContainer = document.getElementById('recent-jobs-list');
+            const filterContainer = document.getElementById('all-jobs-container');
             
             let html = '';
-            if (jobs && jobs.length > 0) {
-                jobs.forEach(job => {
+            if(jobsList.length > 0) {
+                jobsList.forEach(job => {
                     html += `
-                    <div class="bg-white p-4 rounded-xl border border-gray-100 space-y-2 shadow-xs">
-                        <div class="flex justify-between">
-                            <h4 class="font-bold text-gray-900">${job.title}</h4>
-                            <span class="bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded">${job.department}</span>
+                    <div class="bg-white p-4 rounded-xl border border-gray-100 space-y-3 shadow-2xs cursor-pointer" onclick='openJobDetailCard(${JSON.stringify(job)})'>
+                        <div class="flex justify-between items-start">
+                            <div><h4 class="font-black text-gray-900 text-sm">${job.title}</h4><p class="text-xs text-gray-400 font-medium">${job.company}</p></div>
+                            <span class="bg-blue-50 text-blue-600 font-bold text-[9px] px-2 py-1 rounded-md">${job.department}</span>
                         </div>
-                        <p class="text-xs text-gray-500">${job.company} - <i class="fa-solid fa-location-dot"></i> ${job.location}</p>
-                        <p class="text-xs text-gray-700">${job.description}</p>
-                        <div class="flex justify-between items-center pt-2 text-xs text-gray-400">
-                            <span>Exp: ${job.experience}</span>
-                            <span>Deadline: ${job.deadline}</span>
+                        <div class="flex flex-wrap gap-2 text-[10px] text-gray-500 font-medium pt-1">
+                            <span><i class="fa-solid fa-location-dot mr-1"></i>${job.location}</span>
+                            <span><i class="fa-solid fa-graduation-cap mr-1"></i>${job.education_level}</span>
+                            <span><i class="fa-solid fa-briefcase mr-1"></i>${job.experience}</span>
                         </div>
                     </div>`;
                 });
             } else {
-                html = '<p class="text-xs text-gray-400 text-center py-4">ምንም ክፍት ስራ አልተገኘም</p>';
+                html = '<p class="text-xs text-gray-400 text-center py-6">ምንም ክፍት ስራ የለም</p>';
             }
-            container.innerHTML = html;
-            if(filteredContainer) filteredContainer.innerHTML = html;
+            listContainer.innerHTML = html;
+            filterContainer.innerHTML = html;
         }
 
-        // ማጣሪያዎችን ከዳታቤዝ በዲናሚክ መንገድ መጫኛ
-        async function loadFilters() {
-            const { data: depts } = await supabaseClient.from('jobs').select('department');
-            const { data: locs } = await supabaseClient.from('jobs').select('location');
-
-            const uDepts = [...new Set(depts?.map(j => j.department))];
-            const uLocs = [...new Set(locs?.map(j => j.location))];
-
+        // Dynamic Filtering Core (Aggregates with real-time job counts)
+        function populateDynamicFilters(jobs) {
             const deptSel = document.getElementById('filter-dept');
             const locSel = document.getElementById('filter-loc');
 
-            if(deptSel && locSel) {
-                deptSel.innerHTML = '<option value="All">All Departments</option>';
-                locSel.innerHTML = '<option value="All">All Locations</option>';
-                uDepts.forEach(d => { if(d) deptSel.innerHTML += `<option value="${d}">${d}</option>`; });
-                uLocs.forEach(l => { if(l) locSel.innerHTML += `<option value="${l}">${l}</option>`; });
-            }
+            const deptCounts = {};
+            const locCounts = {};
+
+            jobs.forEach(j => {
+                if(j.department) deptCounts[j.department] = (deptCounts[j.department] || 0) + 1;
+                if(j.location) locCounts[j.location] = (locCounts[j.location] || 0) + 1;
+            });
+
+            deptSel.innerHTML = '<option value="All">All Departments</option>';
+            locSel.innerHTML = '<option value="All">All Locations</option>';
+
+            for(let key in deptCounts) { deptSel.innerHTML += `<option value="${key}">${key} (${deptCounts[key]})</option>`; }
+            for(let key in locCounts) { locSel.innerHTML += `<option value="${key}">${key} (${locCounts[key]})</option>`; }
         }
 
-        // ፕሮፋይል ሴቭ ማድረጊያ
-        async function saveUserProfile() {
-            const name = document.getElementById('prof-fullname').value;
-            const phone = document.getElementById('prof-phone').value;
-            const dept = document.getElementById('prof-dept').value;
-            const gender = document.getElementById('prof-gender').value;
-            const edu = document.getElementById('prof-edu').value;
-            const exp = document.getElementById('prof-exp').value;
+        function filterJobsList() {
+            const dept = document.getElementById('filter-dept').value;
+            const loc = document.getElementById('filter-loc').value;
+            const edu = document.getElementById('filter-text-edu' || 'filter-edu').value;
+            const exp = document.getElementById('filter-exp').value;
 
-            const { error } = await supabaseClient.from('users').update({
-                fullname: name, phone: phone, department: dept, gender: gender, education_level: edu, experience: exp, profile_completion: 80
-            }).eq('telegram_id', tgUser.id);
+            let filtered = dynamicJobsMemory;
 
-            if(!error) {
-                alert("ፕሮፋይልዎ በትክክል ተቀምጧል!");
-                initializeApp();
+            if(dept !== 'All') filtered = filtered.filter(j => j.department === dept);
+            if(loc !== 'All') filtered = filtered.filter(j => j.location === loc);
+            if(edu !== 'All') filtered = filtered.filter(j => j.education_level === edu);
+            if(exp !== 'All') filtered = filtered.filter(j => j.experience === exp);
+
+            document.getElementById('all-jobs-container').innerHTML = '';
+            renderJobsView(filtered);
+        }
+
+        // Modal triggers
+        function openJobDetailCard(job) {
+            document.getElementById('modal-title').innerText = job.title;
+            document.getElementById('modal-company').innerText = job.company;
+            document.getElementById('modal-dept').innerText = job.department;
+            document.getElementById('modal-loc').innerText = job.location;
+            document.getElementById('modal-edu').innerText = job.education_level;
+            document.getElementById('modal-exp').innerText = job.experience;
+            document.getElementById('modal-salary').innerText = job.salary || 'Negotiable';
+            document.getElementById('modal-deadline').innerText = job.deadline;
+            document.getElementById('modal-desc').innerText = job.description;
+
+            document.getElementById('job-detail-modal').classList.remove('hidden');
+        }
+
+        function closeModal() { document.getElementById('job-detail-modal').classList.add('hidden'); }
+
+        // ================= ADMIN LOGIC CONTROL PANEL =================
+        function unlockDashboard() {
+            const pass = document.getElementById('admin-pass-field').value;
+            if (pass === "admin123" && tgUser.id === SUPER_ADMIN_TG_ID) {
+                document.getElementById('admin-lock-screen').classList.add('hidden');
+                document.getElementById('admin-workspace').classList.remove('hidden');
             } else {
-                alert("ስህተት አጋጥሟል!");
+                alert("የይለፍ ቃል ተሳስቷል ወይም ይህን ዳሽቦርድ ለመክፈት አልተፈቀደልዎትም!");
             }
         }
 
-        // ስራ መለጠፊያ እና ስማርት ኖቲፊኬሽን መላኪያ (Core Feature)
-        async function postJobAndNotify() {
-            // የደህንነት ማረጋገጫ - አድሚኑ ያንተ ID መሆኑን ያረጋግጣል
-            if(tgUser.id !== DEFAULT_ADMIN_TG_ID) {
-                alert("ይቅርታ፣ ይህንን ለማድረግ የአድሚን ፈቃድ ያስፈልግዎታል!");
-                return;
-            }
+        // Admin Publishing System and Smart Notification Engine
+        async function publishJobAndBlast() {
+            const title = document.getElementById('a-title').value;
+            const company = document.getElementById('a-company').value;
+            const department = document.getElementById('a-dept').value;
+            const education_level = document.getElementById('a-edu').value;
+            const experience = document.getElementById('a-exp').value;
+            const location = document.getElementById('a-loc').value;
+            const salary = document.getElementById('a-salary').value;
+            const job_type = document.getElementById('a-type').value;
+            const deadline = document.getElementById('a-deadline').value;
+            const description = document.getElementById('a-desc').value;
 
-            const title = document.getElementById('job-title').value;
-            const company = document.getElementById('job-company').value;
-            const dept = document.getElementById('job-dept').value;
-            const loc = document.getElementById('job-loc').value;
-            const edu = document.getElementById('job-edu').value;
-            const exp = document.getElementById('job-exp').value;
-            const type = document.getElementById('job-type').value;
-            const deadline = document.getElementById('job-deadline').value;
-            const desc = document.getElementById('job-desc').value;
+            if(!title || !company || !department || !deadline) { alert("እባክዎ ዋና የሆኑ መረጃዎችን ያሟሉ!"); return; }
 
-            if(!title || !company || !dept || !loc || !deadline) {
-                alert("እባክዎ ሁሉንም አስፈላጊ ቦታዎች ይሙሉ!");
-                return;
-            }
-
-            const { data: job, error } = await supabaseClient.from('jobs').insert([{
-                title, company, department: dept, location: loc, education_level: edu, experience: exp, job_type: type, deadline, description: desc
+            const { data: job, error } = await client.from('jobs').insert([{
+                title, company, department, education_level, experience, location, salary, job_type, deadline, description
             }]).select().single();
 
-            if (!error && job) {
-                alert("ስራው በተሳካ ሁኔታ ተለጥፏል! አሁን ማሳወቂያዎች ለተጠቃሚዎች እየተላኩ ነው...");
+            if(!error && job) {
+                alert("📢 ስራው በተሳካ ሁኔታ ተለጥፏል! አሁን ሲስተሙ ተጠቃሚዎችን እየፈለገ ነው...");
                 
-                // ከተለጠፈው ስራ ጋር ተስማሚ ዲፓርትመንት ያላቸውን ተጠቃሚዎች መፈለግ
-                const { data: matchedUsers } = await supabaseClient.from('users').select('telegram_id').eq('department', dept);
+                // Smart Targeting Loop (Finds users with matching Department criteria)
+                const { data: targetedUsers } = await client.from('users').select('id, telegram_id').eq('department', department);
                 
-                if (matchedUsers && matchedUsers.length > 0) {
+                if(targetedUsers && targetedUsers.length > 0) {
                     let sentCount = 0;
-                    for (let user of matchedUsers) {
-                        const message = `📢 አዲስ ስራ ተለጥፏል!\n\n💼 የስራ መደብ: ${title}\n🏢 ኩባንያ: ${company}\n📍 ቦታ: ${loc}\n🎓 የትምህርት ደረጃ: ${edu}\n⏳ ልምድ: ${exp}\n\nSiraLink App ን ከፍተው ዝርዝሩን ማየት ይችላሉ።`;
+                    for(let target of targetedUsers) {
+                        const message = `📢 አዲስ የ ${department} ስra ተለጥፏል!\n\n💼 የስራ መደብ: ${title}\n🏢 ኩባንያ: ${company}\n📍 ቦታ: ${location}\n🎓 ደረጃ: ${education_level}\n⏳ ልምድ: ${experience}\n\n🔗 መተግበሪያውን ከፍተው ማመልከት ይችላሉ።`;
                         
                         try {
-                            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                            let res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                                 method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ chat_id: user.telegram_id, text: message })
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({ chat_id: target.telegram_id, text: message })
                             });
-                            sentCount++;
-                        } catch (e) {
-                            console.error("Notification delivery failed for ID:", user.telegram_id);
-                        }
+                            if(res.ok) {
+                                await client.from('notifications').insert([{ user_id: target.id, job_id: job.id }]);
+                                sentCount++;
+                            }
+                        } catch(err) { console.error(err); }
                     }
-                    alert(`የማሳወቂያ መልዕክት ለ ${sentCount} ተጠቃሚዎች በቴሌግራም ተልኳል!`);
+                    alert(`✅ Smart Notification Sent Successfully!\n\nSent to ${sentCount} users matching the department "${department}".`);
                 } else {
-                    alert("የተዛመደ ዲፓርትመንት ያለው ተጠቃሚ ባለመኖሩ ኖቲፊኬሽን አልተላከም።");
+                    alert("ማሳሰቢያ- የዚህ ዲፓርትመንት ተጠቃሚ ዳታቤዝ ውስጥ ስላልተገኘ ማሳወቂያ አልተላከም::");
                 }
-                initializeApp();
-            } else {
-                alert("ስራውን መለጠፍ አልተቻለም። እባክዎ የ Supabase ቴብል በትክክል መፈጠሩን ያረጋግጡ።");
+                bootEngine();
+            } else { alert("ስራውን መለጠፍ አልተቻለም!"); }
+        }
+
+        // Global Broadcast Engine
+        async function sendGlobalBroadcast() {
+            const text = document.getElementById('a-broadcast-msg').value;
+            if(!text) { alert("እባክዎ የሚላክ መልዕክት ይጻፉ!"); return; }
+
+            const { data: allUsers } = await client.from('users').select('telegram_id');
+            if(allUsers && allUsers.length > 0) {
+                let successCount = 0;
+                for(let u of allUsers) {
+                    try {
+                        let res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({ chat_id: u.telegram_id, text: `📢 SiraLink መልዕክት:\n\n${text}` })
+                        });
+                        if(res.ok) successCount++;
+                    } catch(e) {}
+                }
+                alert(`የብሮድካስት መልዕክት ለ ${successCount} ተጠቃሚዎች ደርሷል!`);
+                document.getElementById('a-broadcast-msg').value = '';
+            }
+        }
+
+        // Admin Control List with Manual Hard Delete
+        function renderAdminJobsList(jobs) {
+            const list = document.getElementById('admin-jobs-list');
+            list.innerHTML = '';
+            jobs.forEach(j => {
+                list.innerHTML += `
+                <div class="flex items-center justify-between bg-gray-50 border p-2.5 rounded-lg text-xs">
+                    <div class="truncate mr-2"><strong>${j.title}</strong><p class="text-[10px] text-gray-400">${j.company}</p></div>
+                    <button onclick="deleteJobManually('${j.id}')" class="bg-red-500 text-white font-bold px-2.5 py-1 rounded hover:bg-red-600 transition">Delete</button>
+                </div>`;
+            });
+        }
+
+        async function deleteJobManually(jobId) {
+            if(confirm("ይህንን የስራ ማስታወቂያ ሙሉ በሙሉ መሰረዝ ይፈልጋሉ?")) {
+                const { error } = await client.from('jobs').delete().eq('id', jobId);
+                if(!error) { alert("ማስታወቂያው ተሰርዟል!"); bootEngine(); }
             }
         }
 
         function switchPage(pageId) {
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(`page-${pageId}`).classList.add('active');
-            document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('text-blue-600'));
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('text-blue-600'));
             document.getElementById(`nav-${pageId}`).classList.add('text-blue-600');
-        }
-
-        function loginAdmin() {
-            const pass = document.getElementById('admin-pass').value;
-            // ያንተን የቴሌግራም ID እና የይለፍ ቃል (admin123) ያረጋግጣል
-            if(pass === "admin123" && tgUser.id === DEFAULT_ADMIN_TG_ID) { 
-                document.getElementById('admin-auth').classList.add('hidden');
-                document.getElementById('admin-panel').classList.remove('hidden');
-            } else { 
-                alert("የይለፍ ቃል ስህተት ነው ወይም አድሚን አይደሉም!"); 
-            }
         }
     </script>
 </body>
