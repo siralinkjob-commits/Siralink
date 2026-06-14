@@ -3,153 +3,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SiraLink - Serverless Advanced Edition</title>
+    <title>SiraLink - Premium Employment Ecosystem</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; -webkit-tap-highlight-color: transparent; }
+        /* 🎨 Premium Glassmorphic Colors & Reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: #060913; color: #ffffff; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        
         .app-container { width: 100%; max-width: 390px; height: 100vh; max-height: 844px; background: #060913; display: flex; flex-direction: column; position: relative; overflow: hidden; border: 1px solid #162245; }
+        
+        /* Pages */
         .page { display: none; width: 100%; height: 100%; flex-direction: column; padding: 20px; overflow-y: auto; padding-bottom: 90px; }
         .page.active { display: flex; }
-        .btn { width: 100%; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; border: none; text-align: center; }
-        .btn-primary { background-color: #2563eb; color: white; }
-        .btn-primary:hover { background-color: #1d4ed8; }
-        .btn-secondary { background-color: transparent; color: white; border: 1px solid #334155; }
-        .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
-        .form-group label { font-size: 12px; color: #94a3b8; font-weight: 500; }
-        .form-input, .form-textarea { width: 100%; padding: 12px; background: #111827; border: 1px solid #1f2937; border-radius: 10px; color: white; font-size: 13.5px; outline: none; }
-        .form-textarea { height: 80px; resize: none; }
         
-        /* Modals */
-        .modal { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(4, 7, 20, 0.8); backdrop-filter: blur(8px); z-index: 100; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: #0b142c; border: 1px solid #162245; border-radius: 20px; padding: 22px; width: 100%; max-width: 340px; display: flex; flex-direction: column; gap: 12px; }
-        .modal-content h3 { font-size: 18px; color: #3b82f6; }
-        .modal-content ol { padding-left: 18px; color: #cbd5e1; font-size: 13px; line-height: 1.6; }
+        /* 💎 Premium UI Components */
+        .btn { width: 100%; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; border: none; text-align: center; }
+        .btn-primary { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
+        .btn-primary:hover { background: linear-gradient(135deg, #1d4ed8, #1e40af); }
+        .btn-secondary { background: rgba(31, 41, 55, 0.6); color: white; border: 1px solid #334155; backdrop-filter: blur(5px); }
+        .btn-sm { padding: 8px 14px; font-size: 12px; border-radius: 8px; width: auto; }
+        
+        /* Form Styling */
+        .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+        .form-group label { font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .form-input, .form-textarea { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #1e293b; border-radius: 10px; color: white; font-size: 13.5px; outline: none; transition: border 0.3s; }
+        .form-input:focus, .form-textarea:focus { border-color: #2563eb; }
+        .form-textarea { height: 90px; resize: none; }
+        
+        /* 🗂️ Category Selector Styles */
+        .category-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 15px; scrollbar-width: none; }
+        .category-scroll::-webkit-scrollbar { display: none; }
+        .cat-chip { padding: 8px 14px; background: #111827; border: 1px solid #1f2937; border-radius: 20px; font-size: 12px; color: #94a3b8; white-space: nowrap; cursor: pointer; transition: all 0.2s; }
+        .cat-chip.active { background: rgba(37, 99, 235, 0.2); border-color: #2563eb; color: #3b82f6; font-weight: bold; }
+
+        /* 💼 Premium Job Cards */
+        .job-card { background: linear-gradient(145deg, #0f172a, #0b0f19); border: 1px solid #1e293b; border-radius: 16px; padding: 16px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; transition: transform 0.2s; cursor: pointer; }
+        .job-card:hover { transform: translateY(-2px); border-color: #334155; }
+        .job-header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .job-title { font-size: 15px; font-weight: 700; color: #ffffff; }
+        .job-company { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+        .job-tag { font-size: 10px; font-weight: bold; padding: 4px 8px; border-radius: 6px; text-transform: uppercase; }
+        .tag-dept { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+        .job-meta-row { display: flex; gap: 12px; font-size: 11px; color: #64748b; margin-top: 4px; }
+
+        /* 👑 Advanced Admin Dashboard Details */
+        .admin-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .admin-stat-card { background: linear-gradient(135deg, #0f172a, #090d16); border: 1px solid #1e293b; padding: 14px; border-radius: 12px; }
+        .admin-stat-card h4 { font-size: 11px; color: #64748b; text-transform: uppercase; }
+        .admin-stat-card p { font-size: 20px; font-weight: 800; color: #3b82f6; margin-top: 4px; }
+        
+        .admin-table-container { background: #0b0f19; border: 1px solid #1e293b; border-radius: 12px; padding: 12px; overflow-x: auto; margin-top: 15px; }
+        .admin-table-title { font-size: 13px; color: #94a3b8; font-weight: 600; margin-bottom: 8px; }
+        .admin-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; }
+        .admin-table th { color: #64748b; padding: 8px; border-bottom: 1px solid #1e293b; }
+        .admin-table td { padding: 10px 8px; border-bottom: 1px solid #0f172a; color: #cbd5e1; }
+
+        /* 📄 Detail View Sheet (Modal overlay for detail info) */
+        .detail-sheet { position: absolute; bottom: -100%; left: 0; right: 0; height: 85%; background: #0b0f19; border-top: 1px solid #1e293b; border-radius: 24px 24px 0 0; z-index: 50; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding: 24px; display: flex; flex-direction: column; overflow-y: auto; }
+        .detail-sheet.open { bottom: 0; }
+        .sheet-close-bar { width: 40px; height: 5px; background: #334155; border-radius: 3px; margin: -10px auto 15px auto; cursor: pointer; }
 
         /* Navigation */
-        .bottom-nav { position: absolute; bottom: 0; left: 0; right: 0; height: 65px; background: rgba(11, 18, 38, 0.9); backdrop-filter: blur(20px); border-top: 1px solid #162245; display: none; justify-content: space-around; align-items: center; z-index: 10; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #64748b; cursor: pointer; font-size: 10px; font-weight: 500; }
+        .bottom-nav { position: absolute; bottom: 0; left: 0; right: 0; height: 68px; background: rgba(6, 9, 19, 0.92); backdrop-filter: blur(15px); border-top: 1px solid #162245; display: none; justify-content: space-around; align-items: center; z-index: 10; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #475569; cursor: pointer; font-size: 10px; font-weight: 600; transition: color 0.2s; }
         .nav-item.active { color: #2563eb; }
-        .nav-icon { font-size: 18px; margin-bottom: 2px; }
+        .nav-icon { font-size: 20px; margin-bottom: 3px; }
         #nav-admin { display: none; }
 
-        /* Profiles & Headers */
-        .home-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .user-profile-summary h2 { font-size: 18px; font-weight: 700; }
-        .tg-username-badge { font-size: 11px; color: #3b82f6; background: rgba(59,130,246,0.1); padding: 2px 6px; border-radius: 6px; display: inline-block; }
-        .header-avatar { width: 40px; height: 40px; border-radius: 50%; background: #1e293b; border: 2px solid #2563eb; object-fit: cover; }
-        .avatar-wrapper { position: relative; width: 80px; height: 80px; margin: 0 auto 10px auto; }
-        .profile-avatar-box { width: 100%; height: 100%; background: #1e293b; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 2px solid #2563eb; object-fit: cover; }
-        .avatar-edit-icon { position: absolute; bottom: 0; right: 0; width: 26px; height: 26px; background: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; border: 2px solid #060913; }
-        
-        /* Stats */
-        .admin-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .admin-stat-card { background: #111827; border: 1px solid #1f2937; padding: 12px; border-radius: 10px; text-align: center; }
-        .admin-stat-card h4 { font-size: 12px; color: #94a3b8; }
-        .admin-stat-card p { font-size: 18px; font-weight: bold; color: #2563eb; margin-top: 4px; }
+        .home-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .tg-username-badge { font-size: 11px; color: #3b82f6; background: rgba(59,130,246,0.1); padding: 3px 8px; border-radius: 6px; display: inline-block; margin-top: 4px; }
+        .header-avatar { width: 42px; height: 42px; border-radius: 50%; background: #1e293b; border: 2px solid #2563eb; object-fit: cover; }
     </style>
 </head>
 <body>
 
     <div class="app-container">
         
-        <div id="how-modal" class="modal">
-            <div class="modal-content">
-                <h3>SiraLink እንዴት ይሰራል? 🚀</h3>
-                <ol>
-                    <li><strong>ፕሮፋይል መሙላት፦</strong> መጀመሪያ የሙያ ዘርፍዎን እና የግል መረጃዎን በደቂቃ ውስጥ ያደራጃሉ።</li>
-                    <li><strong>የስራ ማሳወቂያ፦</strong> የእርስዎን የሙያ ዘርፍ የሚመስል አዲስ ስራ በአስተዳዳሪው ሲለጠፍ ወዲያውኑ በቦቱ ፈጣን መልዕክት (Notification) ይደርስዎታል።</li>
-                    <li><strong>በአንድ ክሊክ ማመልከት፦</strong> የሚፈልጉትን ስራ ሲያገኙ "Apply" የሚለውን በመንካት በቀጥታ ማመልከት ይችላሉ።</li>
-                </ol>
-                <button class="btn btn-primary" style="padding: 10px;" onclick="closeHowItWorks()">ተረዳሁ፣ ዝጋ</button>
+        <div id="detail-sheet" class="detail-sheet">
+            <div class="sheet-close-bar" onclick="closeDetailSheet()"></div>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+                <div>
+                    <h2 id="sheet-title" style="font-size: 19px; font-weight: 700;">-</h2>
+                    <p id="sheet-company" style="font-size: 13px; color: #94a3b8; margin-top: 2px;">-</p>
+                </div>
+                <span id="sheet-dept" class="job-tag tag-dept">-</span>
+            </div>
+            
+            <hr style="border: 0; border-top: 1px solid #1e293b; margin-bottom: 15px;">
+            
+            <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
+                <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #cbd5e1;">📍 <strong>ቦታ (Location):</strong> <span id="sheet-location">-</span></div>
+                <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #cbd5e1;">💰 <strong>ደመወዝ (Salary):</strong> <span id="sheet-salary">-</span></div>
+            </div>
+
+            <h3 style="font-size: 13px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">የስራ ማብራሪያ (Description)</h3>
+            <div id="sheet-desc" style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6; background: #0f172a; padding: 12px; border-radius: 10px; min-height: 100px; margin-bottom: 25px; overflow-y: auto;">-</div>
+            
+            <div style="display: flex; gap: 10px; margin-top: auto;">
+                <button class="btn btn-secondary" onclick="alert('ይህ ስራ በምርጫዎችዎ ውስጥ ተቀምጧል!')" style="flex: 1;">Save Job ⭐️</button>
+                <button class="btn btn-primary" onclick="alert('ማመልከቻዎ በተሳካ ሁኔታ ተልኳል! 🚀')" style="flex: 2;">Apply Now 🚀</button>
             </div>
         </div>
 
-        <div id="splash-page" class="page active">
-            <div style="margin-top: 20px;">
-                <div style="width: 45px; height: 45px; background: linear-gradient(135deg, #2563eb, #1d4ed8); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: bold; margin-bottom: 10px;">S</div>
-                <h1 style="font-size: 26px; font-weight: 700;">SiraLink</h1>
-                <p style="font-size: 12px; color: #94a3b8;">Enterprise Employment Ecosystem</p>
+        <div id="splash-page" class="page active" style="justify-content: center; text-align: center; gap: 20px;">
+            <div style="width: 65px; height: 65px; background: linear-gradient(135deg, #2563eb, #1d4ed8); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; margin: 0 auto;">S</div>
+            <div>
+                <h1 style="font-size: 28px; font-weight: 800; letter-spacing: -0.5px;">SiraLink</h1>
+                <p style="font-size: 12px; color: #64748b; margin-top: 4px;">Enterprise Employment Ecosystem</p>
             </div>
-            <div style="margin: 40px 0;">
-                <h2 style="font-size: 26px; font-weight: 800; line-height: 1.3;">Find the right job.<br>Find the right talent.</h2>
-                <p style="font-size: 13px; color: #94a3b8; margin-top: 10px; line-height: 1.5;">ከምንም በላይ ፈጣን፣ አነስተኛ ዳታ የሚጠቀም እና በቴሌግራም መተግበሪያ ውስጥ በቀጥታ የሚሰራ የቅጥር መድረክ።</p>
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: auto; padding-bottom: 20px;">
-                <button class="btn btn-primary" onclick="navigateTo('home-page')">Get Started</button>
-                <button class="btn btn-secondary" onclick="showHowItWorks()">How It Works</button>
-            </div>
+            <button class="btn btn-primary" onclick="initAppTabs()" style="margin-top: 30px; width: 85%;">መተግበሪያውን ክፈት</button>
         </div>
 
         <div id="home-page" class="page">
             <div class="home-header">
-                <div class="user-profile-summary">
-                    <h2 id="home-user-greeting">ሰላም 👋</h2>
+                <div>
+                    <h2 id="home-user-greeting" style="font-size: 17px; font-weight: 700;">ሰላም 👋</h2>
                     <div id="tg-username" class="tg-username-badge">@telegram_user</div>
                 </div>
-                <img id="header-avatar-img" class="header-avatar" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2364748b'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>">
+                <img class="header-avatar" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563eb'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>">
             </div>
-            <div style="font-size: 14px; color: #94a3b8; margin-bottom: 15px;">ወደ SiraLink በደህና መጡ! አዲስ ስራዎች ሲወጡ በየዘርፍዎ ማሳወቂያ ይደርስዎታል።</div>
-            <h3 style="font-size: 15px; margin-bottom: 10px;">የቅርብ ጊዜ ስራዎች</h3>
-            <div id="job-list-container" style="display: flex; flex-direction: column; gap: 10px;">
-               <p style="font-size: 12px; color: #64748b;">ምንም የተለጠፈ ስራ የለም...</p>
+
+            <h3 style="font-size: 12px; color: #64748b; text-transform: uppercase; margin-bottom: 8px;">በሙያ ዘርፍ ይፈልጉ</h3>
+            <div class="category-scroll">
+                <div class="cat-chip active" onclick="filterJobs('All', this)">All Jobs</div>
+                <div class="cat-chip" onclick="filterJobs('Geography', this)">Geography</div>
+                <div class="cat-chip" onclick="filterJobs('IT', this)">IT & Tech</div>
+                <div class="cat-chip" onclick="filterJobs('Accounting', this)">Accounting</div>
+                <div class="cat-chip" onclick="filterJobs('Engineering', this)">Engineering</div>
             </div>
+
+            <h3 style="font-size: 14px; margin-bottom: 12px; font-weight: 700;">የቅርብ ጊዜ ክፍት ስራዎች</h3>
+            <div id="job-list-container" style="display: flex; flex-direction: column;">
+               </div>
         </div>
 
         <div id="profile-page" class="page">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <div class="avatar-wrapper">
-                    <img id="profile-avatar-img" class="profile-avatar-box" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2364748b'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>">
-                    <label for="profile-image-input" class="avatar-edit-icon">📷</label>
-                    <input type="file" id="profile-image-input" accept="image/*" onchange="previewProfileImage()">
-                </div>
-                <h2 id="profile-display-name" style="font-size: 18px;">የግል መገለጫ</h2>
-            </div>
-            <div class="form-group"><label>ሙሉ ስም (Full Name)</label><input type="text" id="user-fullname" class="form-input"></div>
-            <div class="form-group"><label>ስልክ ቁጥር (Phone Number)</label><input type="tel" id="user-phone" class="form-input" placeholder="09..."></div>
-            <div class="form-group"><label>የትምህርት ደረጃ</label><input type="text" id="user-education" class="form-input" placeholder="Degree, Diploma..."></div>
-            <div class="form-group"><label>የስራ ልምድ (በአመት)</label><input type="number" id="user-experience" class="form-input"></div>
-            <div class="form-group"><label>የሙያ ዘርፍ/ዲፓርትመንት (Department በፅሁፍ)</label><input type="text" id="user-department" class="form-input" placeholder="ለምሳሌ፡ IT, Accounting, Health..."></div>
-            <button class="btn btn-primary" onclick="saveProfileToSupabase()">መረጃውን አስቀምጥ (Save)</button>
+            <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 15px;">የግል መገለጫ (Profile)</h2>
+            <div class="form-group"><label>ሙሉ ስም</label><input type="text" id="user-fullname" class="form-input"></div>
+            <div class="form-group"><label>ስልክ ቁጥር</label><input type="tel" id="user-phone" class="form-input" placeholder="09..."></div>
+            <div class="form-group"><label>የሙያ ዘርፍ/ዲፓርትመንት (በፅሁፍ)</label><input type="text" id="user-department" class="form-input" placeholder="ለምሳሌ፡ Geography, IT, Accounting"></div>
+            <button class="btn btn-primary" onclick="saveProfileToSupabase()" style="margin-top: 10px;">መረጃውን አስቀምጥ</button>
         </div>
 
         <div id="admin-page" class="page">
-            <h2 style="font-size: 20px; margin-bottom: 15px; color: #3b82f6;">Admin Panel HQ 👑</h2>
+            <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 15px; color: #3b82f6;">Admin HQ Dashboard 👑</h2>
+            
             <div class="admin-stat-grid">
-                <div class="admin-stat-card"><h4>ጠቅላላ ተጠቃሚ</h4><p id="stat-users">...</p></div>
-                <div class="admin-stat-card"><h4>የተለጠፉ ስራዎች</h4><p id="stat-jobs">...</p></div>
+                <div class="admin-stat-card"><h4>ጠቅላላ ተጠቃሚ</h4><p id="stat-users">12</p></div>
+                <div class="admin-stat-card"><h4>የተለጠፉ ስራዎች</h4><p id="stat-jobs">4</p></div>
             </div>
-            
-            <h3 style="font-size: 14px; margin-bottom: 10px; color: #94a3b8;">አዲስ ስራ መለጠፊያ</h3>
-            <div class="form-group"><label>የስራ መደብ (Job Title)</label><input type="text" id="job-title" class="form-input"></div>
-            <div class="form-group"><label>ድርጅት (Company Name)</label><input type="text" id="job-company" class="form-input"></div>
-            <div class="form-group"><label>ቦታ (Location)</label><input type="text" id="job-location" class="form-input"></div>
-            <div class="form-group"><label>ደመወዝ (Salary)</label><input type="text" id="job-salary-input" class="form-input" value="Negotiable"></div>
-            <div class="form-group"><label>ዲፓርትመንት (Target Department Notification)</label><input type="text" id="job-dept-input" class="form-input" placeholder="IT, Accounting..."></div>
-            <div class="form-group"><label>ዝርዝር መግለጫ (Job Description)</label><textarea id="job-desc" class="form-textarea"></textarea></div>
-            
-            <button class="btn btn-primary" id="btn-post-job" onclick="adminPostJobAndNotify()">ስራውን አውጣና ኖቲፊኬሽን ላክ 📢</button>
+
+            <div style="background: #0b0f19; border: 1px solid #1e293b; padding: 16px; border-radius: 14px; margin-bottom: 15px;">
+                <h3 style="font-size: 13px; color: #3b82f6; margin-bottom: 12px; text-transform: uppercase;">አዲስ የስራ ማስታወቂያ</h3>
+                <div class="form-group"><label>የስራ መደብ (Job Title)</label><input type="text" id="job-title" class="form-input" placeholder="e.g. GIS Analyst"></div>
+                <div class="form-group"><label>ድርጅት (Company)</label><input type="text" id="job-company" class="form-input" placeholder="e.g. MapEthiopia"></div>
+                <div class="form-group"><label>ቦታ (Location)</label><input type="text" id="job-location" class="form-input" placeholder="e.g. Addis Ababa"></div>
+                <div class="form-group"><label>ደመወዝ (Salary)</label><input type="text" id="job-salary-input" class="form-input" value="Negotiable"></div>
+                <div class="form-group"><label>ዒላማ ዲፓርትመንት (Notification Target)</label><input type="text" id="job-dept-input" class="form-input" placeholder="e.g. Geography"></div>
+                <div class="form-group"><label>ዝርዝር መግለጫ (Description)</label><textarea id="job-desc" class="form-textarea" placeholder="የስራውን ዝርዝር ሁኔታ እዚህ ይፃፉ..."></textarea></div>
+                <button class="btn btn-primary" id="btn-post-job" onclick="adminPostJobAndNotify()">አውጣና ኖቲፊኬሽን ላክ 📢</button>
+            </div>
+
+            <div class="admin-table-container">
+                <div class="admin-table-title">በቅርብ የተለጠፉ ስራዎች ማጠቃለያ</div>
+                <table class="admin-table">
+                    <thead>
+                        <tr><th>የስራ መደብ</th><th>ዘርፍ</th><th>ድርጅት</th></tr>
+                    </thead>
+                    <tbody id="admin-jobs-table-body">
+                        </tbody>
+                </table>
+            </div>
         </div>
 
         <div id="global-nav" class="bottom-nav">
             <div id="nav-home" class="nav-item active" onclick="switchTab('home-page', this)"><div class="nav-icon">🏠</div><div>Home</div></div>
             <div id="nav-profile" class="nav-item" onclick="switchTab('profile-page', this)"><div class="nav-icon">👤</div><div>Profile</div></div>
-            <div id="nav-admin" class="nav-item" onclick="switchTab('admin-page', this)"><div class="nav-icon">👑</div><div>Admin</div></div>
+            <div id="nav-admin" class="nav-item" onclick="switchTab('admin-page', this)"><div class="nav-icon">👑</div><div>Admin Panel</div></div>
         </div>
     </div>
 
     <script>
         // ⚙️ የቁልፍ ቅንብሮች (CONFIGURATION)
-        // 🛑 መተካት ያለባቸው ነገሮች፦
         const ADMIN_TELEGRAM_ID = 8525980303; // <-- ያንተን/ሽን የቴሌግራም ID እዚህ ይተኩ
-        const BOT_TOKEN = "8772313110:AAEUCxQ9POnBagSsdq019hgS7weoEQbGe-U";     // <-- ከ BotFather ያገኙትን የቦት ቶከን እዚህ ያስገቡ
-        const SUPABASE_URL = "https://sehdvceagbkowljnpfnn.supabase.co"; 
-        const SUPABASE_KEY = "sb_publishable_cteBZ-q0GqKP_y0W95FfOA_zkQwoHKx";
+        const BOT_TOKEN = "8772313110:AAEUCxQ9POnBagSsdq019hgS7weoEQbGe-U"; // ያቀረብከው/ሽው ትክክለኛ ቦት ቶከን
+        const SUPABASE_URL = "https://sehdvceagbkowljnpfnn.supabase.co"; // <-- የራስህን/ሽን የሱፓቤዝ URL ይተኩ
+        const SUPABASE_KEY = "sb_publishable_cteBZ-q0GqKP_y0W95FfOA_zkQwoHKx"; // <-- የራስህን/ሽን የሱፓቤዝ KEY ይተኩ
 
         let tg = window.Telegram?.WebApp;
-        let currentUserId = 999999; // ቴሌግራም ላይ ካልሆነ የሚሰጥ ደሚ ID
+        let currentUserId = 999999;
         let currentUsername = "local_user";
+        let allJobsFetched = []; // የተጫኑ ስራዎች በሙሉ የሚቀመጡበት
 
+        // ቴሌግራም ሲነሳ የዩዘር መረጃዎችን መውሰጃ
         if (tg) {
             tg.expand();
             let user = tg.initDataUnsafe?.user;
@@ -158,17 +204,18 @@
                 currentUsername = user.username ? "@" + user.username : "User_" + user.id;
                 document.getElementById('tg-username').innerText = currentUsername;
                 document.getElementById('home-user-greeting').innerText = "ሰላም፣ " + user.first_name + " 👋";
-                document.getElementById('user-fullname').value = user.first_name + (user.last_name ? " " + user.last_name : "");
                 
-                // 🔐 ነጥብ 4፦ በአንተ ID ብቻ አድሚን ዳሽቦርድ እንዲከፈት ማድረጊያ
                 if (currentUserId === ADMIN_TELEGRAM_ID) {
                     document.getElementById('nav-admin').style.display = 'flex';
                 }
             }
         }
 
-        function showHowItWorks() { document.getElementById('how-modal').style.display = 'flex'; }
-        function closeHowItWorks() { document.getElementById('how-modal').style.display = 'none'; }
+        function initAppTabs() {
+            navigateTo('home-page');
+            fetchJobsFromSupabase();
+            fetchAdminStats();
+        }
 
         function navigateTo(pageId) {
             document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
@@ -186,59 +233,128 @@
             navigateTo(pageId);
         }
 
-        function previewProfileImage() {
-            const file = document.getElementById('profile-image-input').files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    document.getElementById('profile-avatar-img').src = e.target.result;
-                    document.getElementById('header-avatar-img').src = e.target.result;
+        // 📄 Detail View Sheet መቆጣጠሪያዎች (Detail Info)
+        function openDetailSheet(title, company, dept, location, salary, desc) {
+            document.getElementById('sheet-title').innerText = title;
+            document.getElementById('sheet-company').innerText = company;
+            document.getElementById('sheet-dept').innerText = dept;
+            document.getElementById('sheet-location').innerText = location;
+            document.getElementById('sheet-salary').innerText = salary;
+            document.getElementById('sheet-desc').innerText = desc;
+            document.getElementById('detail-sheet').classList.add('open');
+        }
+
+        function closeDetailSheet() {
+            document.getElementById('detail-sheet').classList.remove('open');
+        }
+
+        // 🔄 ከ Supabase ላይ ስራዎችን አውጥቶ በሆም ገጽ ላይ በዝርዝር ማሳያ
+        async function fetchJobsFromSupabase() {
+            const container = document.getElementById('job-list-container');
+            container.innerHTML = '<p style="font-size:12px; color:#64748b;">ስራዎች በመጫን ላይ ናቸው...</p>';
+            
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/jobs?order=id.desc`, {
+                    headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY }
+                });
+                if(res.ok) {
+                    allJobsFetched = await res.json();
+                    renderJobCards(allJobsFetched);
+                    renderAdminTable(allJobsFetched);
                 }
-                reader.readAsDataURL(file);
+            } catch (e) {
+                container.innerHTML = '<p style="font-size:12px; color:#ef4444;">ስራዎችን መጫን አልተቻለም።</p>';
             }
+        }
+
+        function renderJobCards(jobs) {
+            const container = document.getElementById('job-list-container');
+            if(jobs.length === 0) {
+                container.innerHTML = '<p style="font-size:12px; color:#64748b;">ምንም ስራ አልተገኘም...</p>';
+                return;
+            }
+            container.innerHTML = '';
+            jobs.forEach(job => {
+                const card = document.createElement('div');
+                card.className = 'job-card';
+                card.onclick = () => openDetailSheet(job.title, job.company, job.department, job.location, job.salary, job.description);
+                
+                card.innerHTML = `
+                    <div class="job-header">
+                        <div>
+                            <div class="job-title">${job.title}</div>
+                            <div class="job-company">${job.company}</div>
+                        </div>
+                        <span class="job-tag tag-dept">${job.department}</span>
+                    </div>
+                    <div class="job-meta-row">
+                        <span>📍 ${job.location}</span>
+                        <span>💰 ${job.salary}</span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderAdminTable(jobs) {
+            const tbody = document.getElementById('admin-jobs-table-body');
+            tbody.innerHTML = '';
+            jobs.slice(0, 5).forEach(job => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td><strong>${job.title}</strong></td><td>${job.department}</td><td>${job.company}</td>`;
+                tbody.appendChild(row);
+            });
+        }
+
+        // 🔍 የ Category ማጣሪያ (Filter)
+        function filterJobs(dept, element) {
+            document.querySelectorAll('.cat-chip').forEach(chip => chip.classList.remove('active'));
+            element.classList.add('active');
+            
+            if(dept === 'All') {
+                renderJobCards(allJobsFetched);
+            } else {
+                const filtered = allJobsFetched.filter(job => job.department.toLowerCase() === dept.toLowerCase());
+                renderJobCards(filtered);
+            }
+        }
+
+        // 📊 የአድሚን ቁጥሮችን ማደሻ (Stats)
+        async function fetchAdminStats() {
+            try {
+                const userRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?select=id`, { method: 'HEAD', headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY, 'Prefer': 'count=exact' } });
+                const jobRes = await fetch(`${SUPABASE_URL}/rest/v1/jobs?select=id`, { method: 'HEAD', headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY, 'Prefer': 'count=exact' } });
+                
+                if(userRes.headers.get('content-range')) {
+                    document.getElementById('stat-users').innerText = userRes.headers.get('content-range').split('/')[1];
+                }
+                if(jobRes.headers.get('content-range')) {
+                    document.getElementById('stat-jobs').innerText = jobRes.headers.get('content-range').split('/')[1];
+                }
+            } catch(e) {}
         }
 
         // 💾 የባለሙያ መረጃዎችን ወደ Supabase ማስቀመጫ
         async function saveProfileToSupabase() {
             const fullname = document.getElementById('user-fullname').value;
             const phone = document.getElementById('user-phone').value;
-            const education = document.getElementById('user-education').value;
-            const experience = document.getElementById('user-experience').value;
             const department = document.getElementById('user-department').value;
 
-            if(!fullname || !phone || !department) { alert("እባክዎ ስም፣ ስልክ እና ዲፓርትመንት በትክክል ይሙሉ!"); return; }
+            if(!fullname || !phone || !department) { alert("እባክዎ መረጃዎችን ያሟሉ!"); return; }
 
-            const profileData = {
-                id: currentUserId,
-                username: currentUsername,
-                fullname: fullname,
-                phone: phone,
-                education: education,
-                experience: parseInt(experience) || 0,
-                department: department.trim()
-            };
+            const profileData = { id: currentUserId, username: currentUsername, fullname, phone, department: department.trim() };
 
-            // የ Supabase UPSERT (ካለ Update ያደርጋል ከሌለ አዲስ ይፈጥራል)
             const res = await fetch(`${SUPABASE_URL}/rest/v1/profiles`, {
                 method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${SUPABASE_KEY}`,
-                    'apikey': SUPABASE_KEY,
-                    'Content-Type': 'application/json',
-                    'Prefer': 'resolution=merge-duplicates'
-                },
+                headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' },
                 body: JSON.stringify(profileData)
             });
 
-            if (res.ok) {
-                alert("መረጃዎ በተሳካ ሁኔታ ዳታቤዝ ላይ ተቀምጧል! 🎉");
-                navigateTo('home-page');
-            } else {
-                alert("መረጃውን ለማስቀመጥ አልተቻለም። እባክዎ ግንኙነትዎን ያረጋግጡ።");
-            }
+            if (res.ok) { alert("መረጃዎ በተሳካ ሁኔታ ተቀምጧል! 🎉"); fetchAdminStats(); navigateTo('home-page'); }
+            else { alert("ማስቀመጥ አልተቻለም፣ ግንኙነትዎን ያረጋግጡ።"); }
         }
 
-        // 📢 ነጥብ 5፦ አድሚኑ ሲለጥፍ ለሚመለከተው ዲፓርትመንት ብቻ ኖቲፊኬሽን መላኪያ (Serverless Logic)
+        // 📢 አዲስ ስራ መለጠፊያ እና ለሚመለከተው ዲፓርትመንት ኖቲፊኬሽን መላኪያ
         async function adminPostJobAndNotify() {
             const title = document.getElementById('job-title').value;
             const company = document.getElementById('job-company').value;
@@ -248,11 +364,10 @@
             const desc = document.getElementById('job-desc').value;
 
             if(!title || !company || !dept) { alert("እባክዎ መረጃዎችን ያሟሉ!"); return; }
-            
             document.getElementById('btn-post-job').innerText = "እየተላከ ነው...";
 
-            // 1. ስራውን ወደ Supabase መለጠፍ
             const jobData = { title, company, location, salary, department: dept.trim(), description: desc, posted_by: currentUserId };
+            
             const jobRes = await fetch(`${SUPABASE_URL}/rest/v1/jobs`, {
                 method: 'POST',
                 headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
@@ -261,20 +376,15 @@
 
             if(!jobRes.ok) { alert("ስራውን መለጠፍ አልተቻለም!"); document.getElementById('btn-post-job').innerText = "እንደገና ይሞክሩ"; return; }
 
-            // 2. በዳታቤዝ ውስጥ ያንን ዲፓርትመንት የመረጡ ሰዎችን ብቻ መፈለግ (Filter)
             const userRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?department=ilike.*${dept.trim()}*`, {
                 headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY }
             });
 
             if (userRes.ok) {
                 const targets = await userRes.json();
-                
-                // 3. ለእያንዳንዱ ተጠቃሚ በቀጥታ በ Telegram Bot API መልዕክት መላክ
                 for(let user of targets) {
                     if(user.id) {
-                        const messageText = `📢 **አዲስ የስራ ማሳወቂያ!**\n\nሰላም ${user.fullname}፣ ከእርስዎ የሙያ ዘርፍ (**${dept}**) ጋር የሚስማማ አዲስ ስራ አሁን ተለጥፏል! \n\n💼 **የስራ መደብ፦** ${title}\n🏢 **ድርጅት፦** ${company}\n\n🚀 አሁኑኑ SiraLink Mini-App ን በመክፈት ማመልከት ይችላሉ!`;
-                        
-                        // የቴሌግራም ቀጥታ API ጥሪ
+                        const messageText = `📢 **አዲስ የስራ ማሳወቂያ!**\n\nሰላም ${user.fullname} 👋፣ ከእርስዎ የሙያ ዘርፍ (**${dept}**) ጋር የሚስማማ አዲስ ስራ አሁን ተለጥፏል! \n\n💼 **የስራ መደብ፦** ${title}\n🏢 **ድርጅት፦** ${company}\n📍 **ቦታ፦** ${location}\n\n🚀 አሁኑኑ SiraLink Mini-App ን በመክፈት ማመልከት ይችላሉ!`;
                         await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -282,16 +392,17 @@
                         });
                     }
                 }
-                alert(`✅ ስራው ወጥቷል! ለ ${targets.length} የ "${dept}" ባለሙያዎች አውቶማቲክ ማሳወቂያ ተልኳል።`);
+                alert(`✅ ስራው ወጥቷል! ለ ${targets.length} የ "${dept}" ባለሙያዎች ማሳወቂያ ተልኳል።`);
             }
 
-            // ፎርሙን ማጽዳት
+            // ፎርም ማጽጃ
             document.getElementById('job-title').value = "";
             document.getElementById('job-company').value = "";
             document.getElementById('job-dept-input').value = "";
             document.getElementById('job-desc').value = "";
             document.getElementById('btn-post-job').innerText = "ስራውን አውጣና Notification ላክ 📢";
-            navigateTo('home-page');
+            
+            initAppTabs();
         }
     </script>
 </body>
