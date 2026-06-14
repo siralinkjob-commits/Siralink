@@ -4,13 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SiraLink - Telegram Based Smart Recruitment Ecosystem</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Telegram Web Apps SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
@@ -23,7 +19,6 @@
 </head>
 <body class="bg-gray-50 text-gray-800 font-sans antialiased pb-24">
 
-    <!-- ================= 1. SPLASH SCREEN (3-5 Seconds) ================= -->
     <div id="splash-screen" class="fixed inset-0 bg-blue-600 flex flex-col items-center justify-center text-white z-50">
         <div class="text-center animate-bounce">
             <i class="fa-solid fa-briefcase text-8xl mb-4"></i>
@@ -35,10 +30,8 @@
         </button>
     </div>
 
-    <!-- MAIN APP CONTENT -->
     <div id="app-content" class="hidden">
         
-        <!-- ================= TOP HEADER ================= -->
         <header class="bg-white shadow-xs p-4 flex items-center justify-between sticky top-0 z-40">
             <div class="flex items-center space-x-3">
                 <div class="relative">
@@ -56,14 +49,11 @@
             </div>
         </header>
 
-        <!-- ANIMATED MOVING TEXT -->
         <div class="bg-blue-50 text-blue-700 text-xs py-2 font-medium marquee border-b border-blue-100">
             <span>ሰላም <span class="welcome-name">@username</span> እንኳን ወደ SiraLink በደህና መጡ! ሲስተሙ በእውነተኛ ሰዓት ከእርስዎ ፕሮፋይል ጋር የሚመጥኑ ስራዎችን ይፈልጋል።</span>
         </div>
 
-        <!-- ================= 2. USER DASHBOARD (HOME) ================= -->
         <div id="page-home" class="page active p-4 space-y-6">
-            <!-- Statistics -->
             <div class="grid grid-cols-3 gap-2.5">
                 <div class="bg-white p-3 rounded-xl border border-gray-100 text-center shadow-2xs">
                     <span class="text-[10px] text-gray-400 block uppercase font-bold tracking-tight">Total Jobs</span>
@@ -79,7 +69,6 @@
                 </div>
             </div>
 
-            <!-- Quick Actions -->
             <div class="space-y-2">
                 <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Quick Actions</h3>
                 <div class="grid grid-cols-2 gap-2.5">
@@ -100,19 +89,16 @@
                 </div>
             </div>
 
-            <!-- Recent Jobs (24 Hours) -->
             <div class="space-y-3">
                 <div class="flex justify-between items-center">
                     <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">Recent Jobs (24 ሰዓት ውስጥ)</h3>
                     <span class="bg-red-500 text-white text-[9px] font-black px-2 py-0.5 rounded-sm animate-pulse">NEW</span>
                 </div>
                 <div id="recent-jobs-list" class="space-y-3">
-                    <!-- Loaded via JS -->
-                </div>
+                    </div>
             </div>
         </div>
 
-        <!-- ================= 3. JOBS PAGE & SMART FILTERS ================= -->
         <div id="page-jobs" class="page p-4 space-y-4">
             <h2 class="text-xl font-black text-gray-900">Smart Search Filters</h2>
             
@@ -148,7 +134,6 @@
 
             <div id="all-jobs-container" class="space-y-3"></div>
 
-            <!-- Job Detail View (Modal State inside ecosystem) -->
             <div id="job-detail-modal" class="fixed inset-0 bg-black/50 hidden z-50 flex items-end justify-center p-4">
                 <div class="bg-white w-full max-w-md rounded-t-2xl p-5 space-y-4 max-h-[85vh] overflow-y-auto animate-slide-up">
                     <div class="flex justify-between items-start border-b pb-2">
@@ -179,7 +164,6 @@
             </div>
         </div>
 
-        <!-- ================= 4. PROFILE PAGE (100% Comprehensive) ================= -->
         <div id="page-profile" class="page p-4 space-y-4">
             <div class="bg-white p-5 rounded-xl border border-gray-100 space-y-4 shadow-2xs">
                 <div class="flex items-center space-x-4">
@@ -197,7 +181,6 @@
                 </div>
 
                 <form id="profile-main-form" class="space-y-4 text-xs">
-                    <!-- Personal Information -->
                     <div class="space-y-2 border-t pt-3">
                         <h4 class="font-bold text-blue-600 uppercase text-[10px]">Personal Information</h4>
                         <input type="text" id="p-fullname" placeholder="Full Name" required class="w-full border p-2.5 rounded-lg">
@@ -216,7 +199,6 @@
                         </div>
                     </div>
 
-                    <!-- Education -->
                     <div class="space-y-2 border-t pt-3">
                         <h4 class="font-bold text-blue-600 uppercase text-[10px]">Education</h4>
                         <select id="p-edulevel" class="w-full border p-2.5 rounded-lg">
@@ -230,7 +212,6 @@
                         </div>
                     </div>
 
-                    <!-- Experience & Documents -->
                     <div class="space-y-2 border-t pt-3">
                         <h4 class="font-bold text-blue-600 uppercase text-[10px]">Experience & Documents</h4>
                         <div class="grid grid-cols-2 gap-2">
@@ -255,7 +236,6 @@
             </div>
         </div>
 
-        <!-- ================= 5. ABOUT US ================= -->
         <div id="page-about" class="page p-4 space-y-4">
             <div class="bg-white p-5 rounded-xl border border-gray-100 text-center space-y-4 shadow-2xs">
                 <i class="fa-solid fa-circle-info text-blue-600 text-6xl"></i>
@@ -270,9 +250,7 @@
             </div>
         </div>
 
-        <!-- ================= 6. ADMIN DASHBOARD ================= -->
         <div id="page-admin" class="page p-4 space-y-4">
-            <!-- Auth Lock Shield -->
             <div id="admin-lock-screen" class="bg-white p-6 rounded-xl border border-gray-200 text-center space-y-4 shadow-sm">
                 <i class="fa-solid fa-shield-halved text-orange-500 text-5xl"></i>
                 <div>
@@ -283,10 +261,8 @@
                 <button onclick="unlockDashboard()" class="w-full bg-gray-900 text-white font-bold py-3 rounded-lg text-xs uppercase tracking-wider shadow-md">Verify & Enter</button>
             </div>
 
-            <!-- Admin Workspace (Hidden by Default) -->
             <div id="admin-workspace" class="hidden space-y-6">
                 
-                <!-- Analytics Section -->
                 <div class="bg-white p-4 rounded-xl border border-gray-100 space-y-3">
                     <h3 class="font-black text-xs uppercase text-gray-400 tracking-wider">Dashboard Analytics</h3>
                     <div class="grid grid-cols-2 gap-2 text-center text-xs">
@@ -295,7 +271,6 @@
                     </div>
                 </div>
 
-                <!-- Add Job Form -->
                 <div class="bg-white p-4 rounded-xl border border-gray-100 space-y-3">
                     <h3 class="font-black text-sm text-gray-800 border-b pb-2"><i class="fa-solid fa-plus-circle mr-2 text-blue-500"></i>Add Job Field</h3>
                     <div class="space-y-2 text-xs">
@@ -328,7 +303,6 @@
                     </div>
                 </div>
 
-                <!-- Admin Broadcast System -->
                 <div class="bg-white p-4 rounded-xl border border-gray-100 space-y-3">
                     <h3 class="font-black text-sm text-orange-600 border-b pb-2"><i class="fa-solid fa-bullhorn mr-2"></i>Admin Broadcast System</h3>
                     <div class="space-y-2 text-xs">
@@ -337,7 +311,6 @@
                     </div>
                 </div>
 
-                <!-- View & Manage Active Jobs (Manual Delete) -->
                 <div class="bg-white p-4 rounded-xl border border-gray-100 space-y-3">
                     <h3 class="font-black text-xs text-gray-400 uppercase tracking-wider">Active Ad Management</h3>
                     <div id="admin-jobs-list" class="space-y-2 max-h-64 overflow-y-auto"></div>
@@ -345,7 +318,6 @@
             </div>
         </div>
 
-        <!-- ================= BOTTOM NAVIGATION MENU ================= -->
         <nav class="fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 shadow-xl flex justify-around py-3 text-gray-400 z-40">
             <button onclick="switchPage('home')" class="flex flex-col items-center space-y-1 text-blue-600" id="nav-home"><i class="fa-solid fa-house text-lg"></i><span class="text-[9px] font-bold">Home</span></button>
             <button onclick="switchPage('jobs')" class="flex flex-col items-center space-y-1" id="nav-jobs"><i class="fa-solid fa-briefcase text-lg"></i><span class="text-[9px] font-bold">Jobs</span></button>
@@ -355,7 +327,6 @@
         </nav>
     </div>
 
-    <!-- ================= SYSTEM ENGINE CODE ================= -->
     <script>
         // Credentials Injection
         const SUPABASE_URL = "https://ifaeolerehyuidtjxrlx.supabase.co"; 
@@ -364,7 +335,7 @@
         const SUPER_ADMIN_TG_ID = 8525980303; 
 
         const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        let tgUser = { id: SUPER_ADMIN_TG_ID, username: "SiraLinkAdmin", first_name: "Admin" }; // Sandbox default
+        let tgUser = { id: SUPER_ADMIN_TG_ID, username: "SiraLinkAdmin", first_name: "Admin" }; // Default sandbox Fallback
 
         // Telegram WebApp Extractor
         if (window.Telegram && window.Telegram.WebApp) {
@@ -394,7 +365,7 @@
             await fetchAllJobsData();
         }
 
-        // Sync and Profile Completion Gauge Logic
+        // Sync Account with Profile Completion Gauge
         async function syncUserAccount() {
             let { data: u, error } = await client.from('users').select('*').eq('telegram_id', tgUser.id).maybeSingle();
             if (!u) {
@@ -434,7 +405,7 @@
                 graduation_year: parseInt(document.getElementById('p-gradyear').value) || null,
                 experience: document.getElementById('p-exp').value,
                 current_position: document.getElementById('p-position').value,
-                profile_completion: 90 // Advanced form tier calculation shortcut
+                profile_completion: 90
             };
 
             const { error } = await client.from('users').update(fields).eq('telegram_id', tgUser.id);
@@ -456,7 +427,7 @@
 
         let dynamicJobsMemory = [];
 
-        // Main Core Retrieval & UI Mapping Engine
+        // Main Retrieval Logic
         async function fetchAllJobsData() {
             const { data: jobs } = await client.from('jobs').select('*').eq('status', 'Active').order('created_at', { ascending: false });
             dynamicJobsMemory = jobs || [];
@@ -493,7 +464,6 @@
             filterContainer.innerHTML = html;
         }
 
-        // Dynamic Filtering Core (Aggregates with real-time job counts)
         function populateDynamicFilters(jobs) {
             const deptSel = document.getElementById('filter-dept');
             const locSel = document.getElementById('filter-loc');
@@ -516,7 +486,7 @@
         function filterJobsList() {
             const dept = document.getElementById('filter-dept').value;
             const loc = document.getElementById('filter-loc').value;
-            const edu = document.getElementById('filter-text-edu' || 'filter-edu').value;
+            const edu = document.getElementById('filter-edu').value;
             const exp = document.getElementById('filter-exp').value;
 
             let filtered = dynamicJobsMemory;
@@ -526,11 +496,9 @@
             if(edu !== 'All') filtered = filtered.filter(j => j.education_level === edu);
             if(exp !== 'All') filtered = filtered.filter(j => j.experience === exp);
 
-            document.getElementById('all-jobs-container').innerHTML = '';
             renderJobsView(filtered);
         }
 
-        // Modal triggers
         function openJobDetailCard(job) {
             document.getElementById('modal-title').innerText = job.title;
             document.getElementById('modal-company').innerText = job.company;
@@ -547,7 +515,7 @@
 
         function closeModal() { document.getElementById('job-detail-modal').classList.add('hidden'); }
 
-        // ================= ADMIN LOGIC CONTROL PANEL =================
+        // ================= ADMIN WORKSPACE =================
         function unlockDashboard() {
             const pass = document.getElementById('admin-pass-field').value;
             if (pass === "admin123" && tgUser.id === SUPER_ADMIN_TG_ID) {
@@ -558,35 +526,62 @@
             }
         }
 
-        // Admin Publishing System and Smart Notification Engine
+        // 🛠️ የተሻሻለ እና ስህተትን የሚመረምር የስራ መለጠፊያ ፈንክሽን 
         async function publishJobAndBlast() {
-            const title = document.getElementById('a-title').value;
-            const company = document.getElementById('a-company').value;
-            const department = document.getElementById('a-dept').value;
+            const title = document.getElementById('a-title').value.trim();
+            const company = document.getElementById('a-company').value.trim();
+            const department = document.getElementById('a-dept').value.trim();
             const education_level = document.getElementById('a-edu').value;
             const experience = document.getElementById('a-exp').value;
-            const location = document.getElementById('a-loc').value;
-            const salary = document.getElementById('a-salary').value;
+            const location = document.getElementById('a-loc').value.trim();
+            const salary = document.getElementById('a-salary').value.trim();
             const job_type = document.getElementById('a-type').value;
             const deadline = document.getElementById('a-deadline').value;
-            const description = document.getElementById('a-desc').value;
+            const description = document.getElementById('a-desc').value.trim();
 
-            if(!title || !company || !department || !deadline) { alert("እባክዎ ዋና የሆኑ መረጃዎችን ያሟሉ!"); return; }
+            if(!title || !company || !department || !deadline) { 
+                alert("እባክዎ ዋና የሆኑ መረጃዎችን (Title, Company, Department, Deadline) ያሟሉ!"); 
+                return; 
+            }
 
-            const { data: job, error } = await client.from('jobs').insert([{
-                title, company, department, education_level, experience, location, salary, job_type, deadline, description
-            }]).select().single();
+            const jobData = {
+                title: title,
+                company: company,
+                department: department,
+                education_level: education_level || "Not Specified",
+                experience: experience || "0 Year",
+                location: location || "Remote",
+                salary: salary || "Negotiable",
+                job_type: job_type,
+                deadline: deadline,
+                description: description || "No description provided.",
+                status: "Active" 
+            };
 
-            if(!error && job) {
+            const { data: job, error } = await client
+                .from('jobs')
+                .insert([jobData])
+                .select()
+                .maybeSingle();
+
+            if (error) {
+                console.error("Supabase Detailed Error:", error);
+                alert(`❌ ስራውን መለጠፍ አልተቻለም!\n\nየስህተት መልዕክት: ${error.message}\nዝርዝር: ${error.details || 'የለም'}\n\n💡 ፍንጭ፡ በ Supabase ቴብልህ ላይ ያሉት የኮለም ስሞች (Title, Company ወዘተ) ትናንሽ ሆሄያት መሆናቸውን አረጋግጥ።`);
+                return;
+            }
+
+            if (job) {
                 alert("📢 ስራው በተሳካ ሁኔታ ተለጥፏል! አሁን ሲስተሙ ተጠቃሚዎችን እየፈለገ ነው...");
                 
-                // Smart Targeting Loop (Finds users with matching Department criteria)
-                const { data: targetedUsers } = await client.from('users').select('id, telegram_id').eq('department', department);
+                const { data: targetedUsers, error: userError } = await client
+                    .from('users')
+                    .select('id, telegram_id')
+                    .eq('department', department);
                 
-                if(targetedUsers && targetedUsers.length > 0) {
+                if(!userError && targetedUsers && targetedUsers.length > 0) {
                     let sentCount = 0;
                     for(let target of targetedUsers) {
-                        const message = `📢 አዲስ የ ${department} ስra ተለጥፏል!\n\n💼 የስራ መደብ: ${title}\n🏢 ኩባንያ: ${company}\n📍 ቦታ: ${location}\n🎓 ደረጃ: ${education_level}\n⏳ ልምድ: ${experience}\n\n🔗 መተግበሪያውን ከፍተው ማመልከት ይችላሉ።`;
+                        const message = `📢 አዲስ የ ${department} ስራ ተለጥፏል!\n\n💼 የስራ መደብ: ${title}\n🏢 ኩባንያ: ${company}\n📍 ቦታ: ${location}\n🎓 ደረጃ: ${education_level}\n⏳ ልምድ: ${experience}\n\n🔗 መተግበሪያውን ከፍተው ማመልከት ይችላሉ።`;
                         
                         try {
                             let res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
@@ -595,17 +590,24 @@
                                 body: JSON.stringify({ chat_id: target.telegram_id, text: message })
                             });
                             if(res.ok) {
-                                await client.from('notifications').insert([{ user_id: target.id, job_id: job.id }]);
+                                await client.from('notifications').insert([{ user_id: target.id, job_id: job.id }]).select();
                                 sentCount++;
                             }
                         } catch(err) { console.error(err); }
                     }
-                    alert(`✅ Smart Notification Sent Successfully!\n\nSent to ${sentCount} users matching the department "${department}".`);
+                    alert(`✅ የማሳወቂያ መልዕክት ለ ${sentCount} ተጠቃሚዎች በቴሌግራም ተልኳል!`);
                 } else {
-                    alert("ማሳሰቢያ- የዚህ ዲፓርትመንት ተጠቃሚ ዳታቤዝ ውስጥ ስላልተገኘ ማሳወቂያ አልተላከም::");
+                    alert("ማሳሰቢያ፦ የዚህ ዲፓርትመንት ተጠቃሚ ዳታቤዝ ውስጥ በአሁኑ ሰዓት ስለሌለ ለይቶ ማሳወቂያ አልተላከም።");
                 }
-                bootEngine();
-            } else { alert("ስራውን መለጠፍ አልተቻለም!"); }
+                
+                // ፎርሙን ማጽዳት
+                document.getElementById('a-title').value = '';
+                document.getElementById('a-company').value = '';
+                document.getElementById('a-dept').value = '';
+                document.getElementById('a-desc').value = '';
+                
+                bootEngine(); 
+            }
         }
 
         // Global Broadcast Engine
@@ -631,7 +633,7 @@
             }
         }
 
-        // Admin Control List with Manual Hard Delete
+        // Active Ad Management Dashboard List
         function renderAdminJobsList(jobs) {
             const list = document.getElementById('admin-jobs-list');
             list.innerHTML = '';
