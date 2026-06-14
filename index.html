@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SiraLink - Premium Employment Ecosystem</title>
+    <title>SiraLink AI - Premium Employment Platform</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* 🎨 Premium Glassmorphic Colors & Reset */
+        /* 🎨 Premium Glassmorphic Dark UI Elements */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background-color: #060913; color: #ffffff; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
         
@@ -16,349 +16,414 @@
         .page { display: none; width: 100%; height: 100%; flex-direction: column; padding: 20px; overflow-y: auto; padding-bottom: 90px; }
         .page.active { display: flex; }
         
-        /* 💎 Premium UI Components */
-        .btn { width: 100%; padding: 14px; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; border: none; text-align: center; }
+        /* Buttons & Badges */
+        .btn { width: 100%; padding: 13px; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s; border: none; text-align: center; }
         .btn-primary { background: linear-gradient(135deg, #2563eb, #1d4ed8); color: white; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
-        .btn-primary:hover { background: linear-gradient(135deg, #1d4ed8, #1e40af); }
-        .btn-secondary { background: rgba(31, 41, 55, 0.6); color: white; border: 1px solid #334155; backdrop-filter: blur(5px); }
-        .btn-sm { padding: 8px 14px; font-size: 12px; border-radius: 8px; width: auto; }
+        .btn-secondary { background: rgba(31, 41, 55, 0.6); color: white; border: 1px solid #334155; }
         
-        /* Form Styling */
-        .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
-        .form-group label { font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-        .form-input, .form-textarea { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #1e293b; border-radius: 10px; color: white; font-size: 13.5px; outline: none; transition: border 0.3s; }
-        .form-input:focus, .form-textarea:focus { border-color: #2563eb; }
-        .form-textarea { height: 90px; resize: none; }
+        /* 🔍 Advanced Filter Grid */
+        .search-container { display: flex; flex-direction: column; gap: 8px; margin-bottom: 15px; background: #0b0f19; padding: 12px; border-radius: 14px; border: 1px solid #1e293b; }
+        .search-bar { width: 100%; padding: 11px 14px; background: #060913; border: 1px solid #1e293b; border-radius: 10px; color: white; font-size: 13px; outline: none; }
+        .filter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .filter-select { padding: 9px; background: #060913; border: 1px solid #1e293b; border-radius: 8px; color: #94a3b8; font-size: 11px; outline: none; }
+
+        /* ⭐ AI Match & Job Cards */
+        .job-card { background: linear-gradient(145deg, #0f172a, #0b0f19); border: 1px solid #1e293b; border-radius: 16px; padding: 16px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; position: relative; cursor: pointer; }
+        .job-title { font-size: 15px; font-weight: 700; color: #ffffff; padding-right: 75px; }
+        .job-company { font-size: 12px; color: #94a3b8; }
         
-        /* 🗂️ Category Selector Styles */
-        .category-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 15px; scrollbar-width: none; }
-        .category-scroll::-webkit-scrollbar { display: none; }
-        .cat-chip { padding: 8px 14px; background: #111827; border: 1px solid #1f2937; border-radius: 20px; font-size: 12px; color: #94a3b8; white-space: nowrap; cursor: pointer; transition: all 0.2s; }
-        .cat-chip.active { background: rgba(37, 99, 235, 0.2); border-color: #2563eb; color: #3b82f6; font-weight: bold; }
+        /* 🧠 AI Match Badge Style */
+        .ai-match-badge { position: absolute; top: 16px; right: 16px; background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); font-size: 11px; font-weight: bold; padding: 4px 8px; border-radius: 20px; letter-spacing: 0.5px; }
+        .job-tags-row { display: flex; gap: 6px; flex-wrap: wrap; }
+        .job-tag { font-size: 10px; font-weight: bold; padding: 4px 8px; border-radius: 6px; background: rgba(59, 130, 246, 0.1); color: #60a5fa; }
 
-        /* 💼 Premium Job Cards */
-        .job-card { background: linear-gradient(145deg, #0f172a, #0b0f19); border: 1px solid #1e293b; border-radius: 16px; padding: 16px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; transition: transform 0.2s; cursor: pointer; }
-        .job-card:hover { transform: translateY(-2px); border-color: #334155; }
-        .job-header { display: flex; justify-content: space-between; align-items: flex-start; }
-        .job-title { font-size: 15px; font-weight: 700; color: #ffffff; }
-        .job-company { font-size: 12px; color: #94a3b8; margin-top: 2px; }
-        .job-tag { font-size: 10px; font-weight: bold; padding: 4px 8px; border-radius: 6px; text-transform: uppercase; }
-        .tag-dept { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
-        .job-meta-row { display: flex; gap: 12px; font-size: 11px; color: #64748b; margin-top: 4px; }
+        /* 💬 Real-Time Chat UI Components */
+        .chat-list-item { display: flex; align-items: center; gap: 12px; background: #0f172a; padding: 12px; border-radius: 12px; margin-bottom: 10px; cursor: pointer; border: 1px solid #1e293b; }
+        .chat-avatar { width: 40px; height: 40px; background: #2563eb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .chat-window { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #060913; z-index: 60; display: none; flex-direction: column; }
+        .chat-header { padding: 16px; background: #0b0f19; border-bottom: 1px solid #1e293b; display: flex; align-items: center; gap: 12px; }
+        .chat-messages { flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .msg-bubble { max-width: 75%; padding: 10px 14px; border-radius: 14px; font-size: 13px; line-height: 1.4; }
+        .msg-incoming { background: #1f2937; align-self: flex-start; border-bottom-left-radius: 4px; }
+        .msg-outgoing { background: #2563eb; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .chat-input-row { padding: 12px; background: #0b0f19; border-top: 1px solid #1e293b; display: flex; gap: 8px; align-items: center; }
 
-        /* 👑 Advanced Admin Dashboard Details */
-        .admin-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .admin-stat-card { background: linear-gradient(135deg, #0f172a, #090d16); border: 1px solid #1e293b; padding: 14px; border-radius: 12px; }
-        .admin-stat-card h4 { font-size: 11px; color: #64748b; text-transform: uppercase; }
-        .admin-stat-card p { font-size: 20px; font-weight: 800; color: #3b82f6; margin-top: 4px; }
+        /* Form Inputs */
+        .form-group { display: flex; flex-direction: column; gap: 5px; margin-bottom: 12px; }
+        .form-group label { font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase; }
+        .form-input, .form-textarea { width: 100%; padding: 11px; background: #0f172a; border: 1px solid #1e293b; border-radius: 10px; color: white; font-size: 13px; outline: none; }
         
-        .admin-table-container { background: #0b0f19; border: 1px solid #1e293b; border-radius: 12px; padding: 12px; overflow-x: auto; margin-top: 15px; }
-        .admin-table-title { font-size: 13px; color: #94a3b8; font-weight: 600; margin-bottom: 8px; }
-        .admin-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; }
-        .admin-table th { color: #64748b; padding: 8px; border-bottom: 1px solid #1e293b; }
-        .admin-table td { padding: 10px 8px; border-bottom: 1px solid #0f172a; color: #cbd5e1; }
-
-        /* 📄 Detail View Sheet (Modal overlay for detail info) */
-        .detail-sheet { position: absolute; bottom: -100%; left: 0; right: 0; height: 85%; background: #0b0f19; border-top: 1px solid #1e293b; border-radius: 24px 24px 0 0; z-index: 50; transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding: 24px; display: flex; flex-direction: column; overflow-y: auto; }
+        /* Detail View Sheet */
+        .detail-sheet { position: absolute; bottom: -100%; left: 0; right: 0; height: 85%; background: #0b0f19; border-top: 1px solid #1e293b; border-radius: 24px 24px 0 0; z-index: 50; transition: bottom 0.3s ease; padding: 24px; display: flex; flex-direction: column; }
         .detail-sheet.open { bottom: 0; }
         .sheet-close-bar { width: 40px; height: 5px; background: #334155; border-radius: 3px; margin: -10px auto 15px auto; cursor: pointer; }
 
         /* Navigation */
-        .bottom-nav { position: absolute; bottom: 0; left: 0; right: 0; height: 68px; background: rgba(6, 9, 19, 0.92); backdrop-filter: blur(15px); border-top: 1px solid #162245; display: none; justify-content: space-around; align-items: center; z-index: 10; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #475569; cursor: pointer; font-size: 10px; font-weight: 600; transition: color 0.2s; }
+        .bottom-nav { position: absolute; bottom: 0; left: 0; right: 0; height: 68px; background: rgba(6, 9, 19, 0.96); border-top: 1px solid #162245; display: none; justify-content: space-around; align-items: center; z-index: 10; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #475569; cursor: pointer; font-size: 10px; font-weight: 600; }
         .nav-item.active { color: #2563eb; }
-        .nav-icon { font-size: 20px; margin-bottom: 3px; }
+        .nav-icon { font-size: 19px; margin-bottom: 3px; }
         #nav-admin { display: none; }
-
-        .home-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .tg-username-badge { font-size: 11px; color: #3b82f6; background: rgba(59,130,246,0.1); padding: 3px 8px; border-radius: 6px; display: inline-block; margin-top: 4px; }
-        .header-avatar { width: 42px; height: 42px; border-radius: 50%; background: #1e293b; border: 2px solid #2563eb; object-fit: cover; }
     </style>
 </head>
 <body>
 
     <div class="app-container">
         
+        <div id="chat-window-box" class="chat-window">
+            <div class="chat-header">
+                <button onclick="closeChatWindow()" style="background:none; border:none; color:white; font-size:18px; cursor:pointer;">⬅</button>
+                <div class="chat-avatar" id="chat-window-avatar">HR</div>
+                <div>
+                    <div style="font-weight:700; font-size:14px;" id="chat-window-name">Ethio Telecom (HR)</div>
+                    <div style="font-size:10px; color:#22c55e;">online</div>
+                </div>
+            </div>
+            <div class="chat-messages" id="chat-messages-container">
+                </div>
+            <div class="chat-input-row">
+                <button onclick="alert('ፋይል (CV / Portfolio) ማጋሪያ ክፍት ሆኗል!')" style="background:none; border:none; font-size:18px; cursor:pointer;">📎</button>
+                <input type="text" id="chat-reply-input" class="search-bar" style="margin-bottom:0;" placeholder="መልዕክትዎን እዚህ ይፃፉ...">
+                <button onclick="sendChatMessageInternal()" class="btn btn-primary" style="width:auto; padding:10px 16px; border-radius:10px;">Send</button>
+            </div>
+        </div>
+
         <div id="detail-sheet" class="detail-sheet">
             <div class="sheet-close-bar" onclick="closeDetailSheet()"></div>
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
                 <div>
-                    <h2 id="sheet-title" style="font-size: 19px; font-weight: 700;">-</h2>
-                    <p id="sheet-company" style="font-size: 13px; color: #94a3b8; margin-top: 2px;">-</p>
+                    <h2 id="sheet-title" style="font-size: 18px; font-weight: 700;">-</h2>
+                    <p id="sheet-company" style="font-size: 13px; color: #94a3b8;">-</p>
                 </div>
-                <span id="sheet-dept" class="job-tag tag-dept">-</span>
+                <div id="sheet-ai-match" class="ai-match-badge">-</div>
             </div>
-            
-            <hr style="border: 0; border-top: 1px solid #1e293b; margin-bottom: 15px;">
-            
-            <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;">
-                <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #cbd5e1;">📍 <strong>ቦታ (Location):</strong> <span id="sheet-location">-</span></div>
-                <div style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #cbd5e1;">💰 <strong>ደመወዝ (Salary):</strong> <span id="sheet-salary">-</span></div>
+            <div style="display: flex; flex-direction: column; gap: 6px; margin-bottom: 15px; font-size: 12.5px; color: #cbd5e1;">
+                <div>📍 <strong>ቦታ፦</strong> <span id="sheet-location">-</span></div>
+                <div>💼 <strong>የስራ አይነት፦</strong> <span id="sheet-type">-</span></div>
+                <div>⏳ <strong>የስራ ልምድ፦</strong> <span id="sheet-exp">-</span></div>
+                <div>💰 <strong>ደመወዝ፦</strong> <span id="sheet-salary">-</span></div>
             </div>
-
-            <h3 style="font-size: 13px; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;">የስራ ማብራሪያ (Description)</h3>
-            <div id="sheet-desc" style="font-size: 13.5px; color: #cbd5e1; line-height: 1.6; background: #0f172a; padding: 12px; border-radius: 10px; min-height: 100px; margin-bottom: 25px; overflow-y: auto;">-</div>
+            <h3 style="font-size: 12px; color: #94a3b8; text-transform: uppercase; margin-bottom: 6px;">የስራ ማብራሪያ</h3>
+            <div id="sheet-desc" style="font-size: 13px; color: #cbd5e1; line-height: 1.5; background: #0f172a; padding: 12px; border-radius: 10px; flex: 1; overflow-y: auto; margin-bottom: 20px;">-</div>
             
-            <div style="display: flex; gap: 10px; margin-top: auto;">
-                <button class="btn btn-secondary" onclick="alert('ይህ ስራ በምርጫዎችዎ ውስጥ ተቀምጧል!')" style="flex: 1;">Save Job ⭐️</button>
-                <button class="btn btn-primary" onclick="alert('ማመልከቻዎ በተሳካ ሁኔታ ተልኳል! 🚀')" style="flex: 2;">Apply Now 🚀</button>
-            </div>
+            <button class="btn btn-primary" id="sheet-apply-btn">Apply For This Job 🚀</button>
         </div>
 
         <div id="splash-page" class="page active" style="justify-content: center; text-align: center; gap: 20px;">
             <div style="width: 65px; height: 65px; background: linear-gradient(135deg, #2563eb, #1d4ed8); border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; margin: 0 auto;">S</div>
-            <div>
-                <h1 style="font-size: 28px; font-weight: 800; letter-spacing: -0.5px;">SiraLink</h1>
-                <p style="font-size: 12px; color: #64748b; margin-top: 4px;">Enterprise Employment Ecosystem</p>
-            </div>
-            <button class="btn btn-primary" onclick="initAppTabs()" style="margin-top: 30px; width: 85%;">መተግበሪያውን ክፈት</button>
+            <h1 style="font-size: 26px; font-weight: 800; letter-spacing: -0.5px;">SiraLink AI</h1>
+            <p style="font-size: 12px; color:#64748b;">Advanced AI-Powered Job Ecosystem</p>
+            <button class="btn btn-primary" onclick="initAppTabs()" style="width: 80%; margin: 0 auto; margin-top:20px;">መተግበሪያውን ክፈት</button>
         </div>
 
         <div id="home-page" class="page">
-            <div class="home-header">
-                <div>
-                    <h2 id="home-user-greeting" style="font-size: 17px; font-weight: 700;">ሰላም 👋</h2>
-                    <div id="tg-username" class="tg-username-badge">@telegram_user</div>
+            <div class="search-container">
+                <input type="text" id="search-input" class="search-bar" placeholder="የስራ መደብ ወይም ድርጅት ይፈልጉ..." oninput="filterAllJobsAdvanced()">
+                <div class="filter-grid">
+                    <select id="location-filter" class="filter-select" onchange="filterAllJobsAdvanced()">
+                        <option value="All">ყველአ ቦታ (Locations)</option>
+                        <option value="Addis Ababa">Addis Ababa</option>
+                        <option value="Remote">Remote Jobs Filter</option>
+                        <option value="Hawassa">Hawassa</option>
+                    </select>
+                    <select id="type-filter" class="filter-select" onchange="filterAllJobsAdvanced()">
+                        <option value="All">የስራ አይነት (Job Type)</option>
+                        <option value="Full-Time">Full-Time</option>
+                        <option value="Part-Time">Part-Time</option>
+                    </select>
+                    <select id="exp-filter" class="filter-select" onchange="filterAllJobsAdvanced()">
+                        <option value="All">የስራ ልምድ (Experience)</option>
+                        <option value="0">0 አመት (Entry)</option>
+                        <option value="1">1-3 አመት</option>
+                        <option value="5">5+ አመት</option>
+                    </select>
+                    <select id="salary-filter" class="filter-select" onchange="filterAllJobsAdvanced()">
+                        <option value="All">ደመወዝ (Salary Type)</option>
+                        <option value="Fixed">Fixed Salary</option>
+                        <option value="Negotiable">Negotiable</option>
+                    </select>
                 </div>
-                <img class="header-avatar" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232563eb'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>">
             </div>
 
-            <h3 style="font-size: 12px; color: #64748b; text-transform: uppercase; margin-bottom: 8px;">በሙያ ዘርፍ ይፈልጉ</h3>
-            <div class="category-scroll">
-                <div class="cat-chip active" onclick="filterJobs('All', this)">All Jobs</div>
-                <div class="cat-chip" onclick="filterJobs('Geography', this)">Geography</div>
-                <div class="cat-chip" onclick="filterJobs('IT', this)">IT & Tech</div>
-                <div class="cat-chip" onclick="filterJobs('Accounting', this)">Accounting</div>
-                <div class="cat-chip" onclick="filterJobs('Engineering', this)">Engineering</div>
-            </div>
+            <div id="job-list-container" style="display: flex; flex-direction: column;"></div>
+        </div>
 
-            <h3 style="font-size: 14px; margin-bottom: 12px; font-weight: 700;">የቅርብ ጊዜ ክፍት ስራዎች</h3>
-            <div id="job-list-container" style="display: flex; flex-direction: column;">
-               </div>
+        <div id="chats-page" class="page">
+            <h2 style="font-size: 19px; font-weight: 800; margin-bottom: 15px;">መልዕክቶች (Messages) 💬</h2>
+            <div id="chats-list-container">
+                <div class="chat-list-item" onclick="openChatWindow('Ethio Telecom (HR)', 'ET')">
+                    <div class="chat-avatar">ET</div>
+                    <div style="flex:1;">
+                        <div style="font-size:14px; font-weight:700;">Ethio Telecom (HR)</div>
+                        <div style="font-size:12px; color:#94a3b8;">የኢንተርቪው ሊንክ ተልኳል፡ እባክዎ ሊንኩን ይጫኑ...</div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div id="profile-page" class="page">
-            <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 15px;">የግል መገለጫ (Profile)</h2>
+            <h2 style="font-size: 19px; font-weight: 800; margin-bottom: 15px;">የግል መገለጫ (User Profile)</h2>
             <div class="form-group"><label>ሙሉ ስም</label><input type="text" id="user-fullname" class="form-input"></div>
-            <div class="form-group"><label>ስልክ ቁጥር</label><input type="tel" id="user-phone" class="form-input" placeholder="09..."></div>
-            <div class="form-group"><label>የሙያ ዘርፍ/ዲፓርትመንት (በፅሁፍ)</label><input type="text" id="user-department" class="form-input" placeholder="ለምሳሌ፡ Geography, IT, Accounting"></div>
+            <div class="form-group"><label>ስልክ ቁጥር</label><input type="tel" id="user-phone" class="form-input"></div>
+            <div class="form-group"><label>የሙያ ዘርፍ/ዲፓርትመንት</label><input type="text" id="user-department" class="form-input" placeholder="e.g. Geography, IT"></div>
+            <div class="form-group"><label>የስራ ልምድ (በአመት)</label><input type="number" id="user-experience" class="form-input" value="0"></div>
             <button class="btn btn-primary" onclick="saveProfileToSupabase()" style="margin-top: 10px;">መረጃውን አስቀምጥ</button>
         </div>
 
         <div id="admin-page" class="page">
-            <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 15px; color: #3b82f6;">Admin HQ Dashboard 👑</h2>
+            <h2 style="font-size: 18px; margin-bottom: 15px; color:#3b82f6;">Admin Panel HQ 👑</h2>
+            <div class="form-group"><label>የስራ መደብ (Job Title)</label><input type="text" id="job-title" class="form-input"></div>
+            <div class="form-group"><label>ድርጅት (Company)</label><input type="text" id="job-company" class="form-input"></div>
+            <div class="form-group"><label>ቦታ (Location)</label><input type="text" id="job-location" class="form-input"></div>
+            <div class="form-group"><label>የስራ አይነት</label>
+                <select id="job-type-input" class="form-input"><option value="Full-Time">Full-Time</option><option value="Part-Time">Part-Time</option></select>
+            </div>
+            <div class="form-group"><label>የሚፈለግ የስራ ልምድ (አመት)</label><input type="number" id="job-exp-input" class="form-input" value="0"></div>
+            <div class="form-group"><label>ደመወዝ</label><input type="text" id="job-salary-input" class="form-input" value="Negotiable"></div>
+            <div class="form-group"><label>ዲፓርትመንት</label><input type="text" id="job-dept-input" class="form-input" placeholder="Geography"></div>
+            <div class="form-group"><label>ዝርዝር መግለጫ</label><textarea id="job-desc" class="form-textarea"></textarea></div>
+            <button class="btn btn-primary" id="btn-post-job" onclick="adminPostJobAndNotify()">አውጣና ኖቲፊኬሽን ላክ 📢</button>
             
-            <div class="admin-stat-grid">
-                <div class="admin-stat-card"><h4>ጠቅላላ ተጠቃሚ</h4><p id="stat-users">12</p></div>
-                <div class="admin-stat-card"><h4>የተለጠፉ ስራዎች</h4><p id="stat-jobs">4</p></div>
-            </div>
-
-            <div style="background: #0b0f19; border: 1px solid #1e293b; padding: 16px; border-radius: 14px; margin-bottom: 15px;">
-                <h3 style="font-size: 13px; color: #3b82f6; margin-bottom: 12px; text-transform: uppercase;">አዲስ የስራ ማስታወቂያ</h3>
-                <div class="form-group"><label>የስራ መደብ (Job Title)</label><input type="text" id="job-title" class="form-input" placeholder="e.g. GIS Analyst"></div>
-                <div class="form-group"><label>ድርጅት (Company)</label><input type="text" id="job-company" class="form-input" placeholder="e.g. MapEthiopia"></div>
-                <div class="form-group"><label>ቦታ (Location)</label><input type="text" id="job-location" class="form-input" placeholder="e.g. Addis Ababa"></div>
-                <div class="form-group"><label>ደመወዝ (Salary)</label><input type="text" id="job-salary-input" class="form-input" value="Negotiable"></div>
-                <div class="form-group"><label>ዒላማ ዲፓርትመንት (Notification Target)</label><input type="text" id="job-dept-input" class="form-input" placeholder="e.g. Geography"></div>
-                <div class="form-group"><label>ዝርዝር መግለጫ (Description)</label><textarea id="job-desc" class="form-textarea" placeholder="የስራውን ዝርዝር ሁኔታ እዚህ ይፃፉ..."></textarea></div>
-                <button class="btn btn-primary" id="btn-post-job" onclick="adminPostJobAndNotify()">አውጣና ኖቲፊኬሽን ላክ 📢</button>
-            </div>
-
-            <div class="admin-table-container">
-                <div class="admin-table-title">በቅርብ የተለጠፉ ስራዎች ማጠቃለያ</div>
-                <table class="admin-table">
-                    <thead>
-                        <tr><th>የስራ መደብ</th><th>ዘርፍ</th><th>ድርጅት</th></tr>
-                    </thead>
-                    <tbody id="admin-jobs-table-body">
-                        </tbody>
-                </table>
-            </div>
+            <hr style="border:0; border-top:1px solid #1e293b; margin:20px 0;">
+            <h3 style="font-size:13px; color:#94a3b8; margin-bottom:10px;">የእጩ ማመልከቻዎች ሁኔታ ማሻሻያ (Status Change)</h3>
+            <button class="btn btn-secondary" onclick="triggerStatusNotification('Viewed', 'ማመልከቻዎ በድርጅቱ ታይቷል👁️')" style="margin-bottom:8px; font-size:12px;">1. ማመልከቻ ሲታይ (Viewed) 🔔</button>
+            <button class="btn btn-secondary" onclick="triggerStatusNotification('Interview', 'ለኢንተርቪው ተመርጠዋል! 📅 ሊንክ በውስጥ መስመር ይላካል')" style="margin-bottom:8px; font-size:12px;">2. Interview ሲጠራ 🔔</button>
         </div>
 
         <div id="global-nav" class="bottom-nav">
             <div id="nav-home" class="nav-item active" onclick="switchTab('home-page', this)"><div class="nav-icon">🏠</div><div>Home</div></div>
+            <div id="nav-chats" class="nav-item" onclick="switchTab('chats-page', this)"><div class="nav-icon">💬</div><div>Chats</div></div>
             <div id="nav-profile" class="nav-item" onclick="switchTab('profile-page', this)"><div class="nav-icon">👤</div><div>Profile</div></div>
-            <div id="nav-admin" class="nav-item" onclick="switchTab('admin-page', this)"><div class="nav-icon">👑</div><div>Admin Panel</div></div>
+            <div id="nav-admin" class="nav-item" onclick="switchTab('admin-page', this)"><div class="nav-icon">👑</div><div>Admin</div></div>
         </div>
     </div>
 
     <script>
-        // ⚙️ የቁልፍ ቅንብሮች (CONFIGURATION)
-        const ADMIN_TELEGRAM_ID = 8525980303; // <-- ያንተን/ሽን የቴሌግራም ID እዚህ ይተኩ
-        const BOT_TOKEN = "8772313110:AAEUCxQ9POnBagSsdq019hgS7weoEQbGe-U"; // ያቀረብከው/ሽው ትክክለኛ ቦት ቶከን
-        const SUPABASE_URL = "https://sehdvceagbkowljnpfnn.supabase.co"; // <-- የራስህን/ሽን የሱፓቤዝ URL ይተኩ
-        const SUPABASE_KEY = "sb_publishable_cteBZ-q0GqKP_y0W95FfOA_zkQwoHKx"; // <-- የራስህን/ሽን የሱፓቤዝ KEY ይተኩ
+        // ⚙️ CONFIGURATION KEYS
+        const ADMIN_TELEGRAM_ID = 8525980303; // <-- ያንተን የቴሌግራም ID እዚህ ይተኩ
+        const BOT_TOKEN = "8772313110:AAEUCxQ9POnBagSsdq019hgS7weoEQbGe-U";
+        const SUPABASE_URL = "https://sehdvceagbkowljnpfnn.supabase.co"; // <-- የሱፓቤዝ URL
+        const SUPABASE_KEY = "sb_publishable_cteBZ-q0GqKP_y0W95FfOA_zkQwoHKx"; // <-- የሱፓቤዝ KEY
 
         let tg = window.Telegram?.WebApp;
         let currentUserId = 999999;
         let currentUsername = "local_user";
-        let allJobsFetched = []; // የተጫኑ ስራዎች በሙሉ የሚቀመጡበት
+        let allJobs = [];
+        
+        // ደሚ የተጠቃሚ መገለጫ (ለ AI Job Matching መነሻ የሚሆን)
+        let userProfileData = { department: "Geography", experience: 1 };
 
-        // ቴሌግራም ሲነሳ የዩዘር መረጃዎችን መውሰጃ
         if (tg) {
             tg.expand();
             let user = tg.initDataUnsafe?.user;
             if (user) {
                 currentUserId = user.id;
                 currentUsername = user.username ? "@" + user.username : "User_" + user.id;
-                document.getElementById('tg-username').innerText = currentUsername;
-                document.getElementById('home-user-greeting').innerText = "ሰላም፣ " + user.first_name + " 👋";
-                
-                if (currentUserId === ADMIN_TELEGRAM_ID) {
-                    document.getElementById('nav-admin').style.display = 'flex';
-                }
+                if (currentUserId === ADMIN_TELEGRAM_ID) document.getElementById('nav-admin').style.display = 'flex';
             }
         }
 
-        function initAppTabs() {
-            navigateTo('home-page');
-            fetchJobsFromSupabase();
-            fetchAdminStats();
-        }
-
+        function initAppTabs() { navigateTo('home-page'); fetchJobsAndProfile(); }
+        
         function navigateTo(pageId) {
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
-            if(['home-page', 'profile-page', 'admin-page'].includes(pageId)) {
-                document.getElementById('global-nav').style.display = 'flex';
-            } else {
-                document.getElementById('global-nav').style.display = 'none';
-            }
+            document.getElementById('global-nav').style.display = ['splash-page'].includes(pageId) ? 'none' : 'flex';
+        }
+        
+        function switchTab(pId, el) {
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active'); navigateTo(pId);
         }
 
-        function switchTab(pageId, element) {
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            element.classList.add('active');
-            navigateTo(pageId);
-        }
-
-        // 📄 Detail View Sheet መቆጣጠሪያዎች (Detail Info)
-        function openDetailSheet(title, company, dept, location, salary, desc) {
-            document.getElementById('sheet-title').innerText = title;
-            document.getElementById('sheet-company').innerText = company;
-            document.getElementById('sheet-dept').innerText = dept;
-            document.getElementById('sheet-location').innerText = location;
-            document.getElementById('sheet-salary').innerText = salary;
-            document.getElementById('sheet-desc').innerText = desc;
-            document.getElementById('detail-sheet').classList.add('open');
-        }
-
-        function closeDetailSheet() {
-            document.getElementById('detail-sheet').classList.remove('open');
-        }
-
-        // 🔄 ከ Supabase ላይ ስራዎችን አውጥቶ በሆም ገጽ ላይ በዝርዝር ማሳያ
-        async function fetchJobsFromSupabase() {
-            const container = document.getElementById('job-list-container');
-            container.innerHTML = '<p style="font-size:12px; color:#64748b;">ስራዎች በመጫን ላይ ናቸው...</p>';
-            
+        async function fetchJobsAndProfile() {
+            // መጀመሪያ የተጠቃሚውን እውነተኛ ፕሮፋይል ከ Supabase ለመጫን መሞከር
             try {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/jobs?order=id.desc`, {
-                    headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY }
-                });
-                if(res.ok) {
-                    allJobsFetched = await res.json();
-                    renderJobCards(allJobsFetched);
-                    renderAdminTable(allJobsFetched);
+                const pRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${currentUserId}`, { headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY } });
+                if(pRes.ok) {
+                    const data = await pRes.json();
+                    if(data.length > 0) {
+                        userProfileData = data[0];
+                        document.getElementById('user-fullname').value = userProfileData.fullname || "";
+                        document.getElementById('user-phone').value = userProfileData.phone || "";
+                        document.getElementById('user-department').value = userProfileData.department || "";
+                        document.getElementById('user-experience').value = userProfileData.experience || 0;
+                    }
                 }
-            } catch (e) {
-                container.innerHTML = '<p style="font-size:12px; color:#ef4444;">ስራዎችን መጫን አልተቻለም።</p>';
-            }
+            } catch(e){}
+            fetchJobs();
         }
 
-        function renderJobCards(jobs) {
-            const container = document.getElementById('job-list-container');
-            if(jobs.length === 0) {
-                container.innerHTML = '<p style="font-size:12px; color:#64748b;">ምንም ስራ አልተገኘም...</p>';
-                return;
+        async function fetchJobs() {
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/jobs?order=id.desc`, { headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY } });
+                if(res.ok) { allJobs = await res.json(); renderAdvancedJobCards(allJobs); }
+            } catch (e) {}
+        }
+
+        // 🧠 ⭐ AI JOB MATCHING ENGINE LOGIC
+        function calculateAIMatchPercentage(job) {
+            let score = 50; // ቤዝ ማች
+            if(!userProfileData.department || !job.department) return "75% Match";
+            
+            // የዲፓርትመንት ንፅፅር
+            if(job.department.toLowerCase().trim() === userProfileData.department.toLowerCase().trim()) {
+                score += 35;
             }
+            // የስራ ልምድ ንፅፅር
+            let userExp = parseInt(userProfileData.experience) || 0;
+            let jobExp = parseInt(job.experience) || 0;
+            if(userExp >= jobExp) {
+                score += 10;
+            } else if(userExp < jobExp && userExp > 0) {
+                score += 5;
+            }
+            if(score > 95) score = 95; // ማክሲመም ካፕ
+            return `${score}% Match`;
+        }
+
+        // 🔍 MULTI-CRITERIA ADVANCED FILTER
+        function filterAllJobsAdvanced() {
+            const searchQuery = document.getElementById('search-input').value.toLowerCase();
+            const locationFilter = document.getElementById('location-filter').value;
+            const typeFilter = document.getElementById('type-filter').value;
+            const expFilter = document.getElementById('exp-filter').value;
+            const salaryFilter = document.getElementById('salary-filter').value;
+
+            const filtered = allJobs.filter(job => {
+                const matchesSearch = job.title.toLowerCase().includes(searchQuery) || job.company.toLowerCase().includes(searchQuery);
+                const matchesLoc = (locationFilter === 'All') || (job.location === locationFilter);
+                const matchesType = (typeFilter === 'All') || (job.job_type === typeFilter || job.type === typeFilter);
+                
+                let matchesExp = true;
+                if(expFilter !== 'All') {
+                    let jExp = parseInt(job.experience) || 0;
+                    if(expFilter === '0') matchesExp = (jExp === 0);
+                    else if(expFilter === '1') matchesExp = (jExp >= 1 && jExp <= 3);
+                    else if(expFilter === '5') matchesExp = (jExp >= 5);
+                }
+                
+                let matchesSalary = true;
+                if(salaryFilter !== 'All') {
+                    if(salaryFilter === 'Negotiable') matchesSalary = job.salary.toLowerCase().includes('neg');
+                    else matchesSalary = !job.salary.toLowerCase().includes('neg');
+                }
+
+                return matchesSearch && matchesLoc && matchesType && matchesExp && matchesSalary;
+            });
+
+            renderAdvancedJobCards(filtered);
+        }
+
+        function renderAdvancedJobCards(jobs) {
+            const container = document.getElementById('job-list-container');
+            if(jobs.length === 0) { container.innerHTML = '<p style="font-size:12px; color:#64748b; padding:10px;">ምንም ስራ አልተገኘም...</p>'; return; }
             container.innerHTML = '';
+            
             jobs.forEach(job => {
+                const matchPercentage = calculateAIMatchPercentage(job);
                 const card = document.createElement('div');
                 card.className = 'job-card';
-                card.onclick = () => openDetailSheet(job.title, job.company, job.department, job.location, job.salary, job.description);
+                card.onclick = () => openDetailSheetAdvanced(job, matchPercentage);
                 
                 card.innerHTML = `
-                    <div class="job-header">
-                        <div>
-                            <div class="job-title">${job.title}</div>
-                            <div class="job-company">${job.company}</div>
-                        </div>
-                        <span class="job-tag tag-dept">${job.department}</span>
-                    </div>
-                    <div class="job-meta-row">
-                        <span>📍 ${job.location}</span>
-                        <span>💰 ${job.salary}</span>
+                    <div class="ai-match-badge">✨ ${matchPercentage}</div>
+                    <div class="job-title">${job.title}</div>
+                    <div class="job-company">${job.company}</div>
+                    <div class="job-tags-row">
+                        <span class="job-tag">${job.department}</span>
+                        <span class="job-tag" style="background:rgba(16,185,129,0.15); color:#10b981;">📍 ${job.location}</span>
+                        <span class="job-tag" style="background:rgba(139,92,246,0.15); color:#a78bfa;">⏳ ${job.experience || 0} አመት</span>
                     </div>
                 `;
                 container.appendChild(card);
             });
         }
 
-        function renderAdminTable(jobs) {
-            const tbody = document.getElementById('admin-jobs-table-body');
-            tbody.innerHTML = '';
-            jobs.slice(0, 5).forEach(job => {
-                const row = document.createElement('tr');
-                row.innerHTML = `<td><strong>${job.title}</strong></td><td>${job.department}</td><td>${job.company}</td>`;
-                tbody.appendChild(row);
+        function openDetailSheetAdvanced(job, match) {
+            document.getElementById('sheet-title').innerText = job.title;
+            document.getElementById('sheet-company').innerText = job.company;
+            document.getElementById('sheet-dept').innerText = job.department;
+            document.getElementById('sheet-location').innerText = job.location;
+            document.getElementById('sheet-type').innerText = job.job_type || job.type || "Full-Time";
+            document.getElementById('sheet-exp').innerText = `${job.experience || 0} አመት`;
+            document.getElementById('sheet-salary').innerText = job.salary;
+            document.getElementById('sheet-desc').innerText = job.description;
+            document.getElementById('sheet-ai-match').innerText = `✨ ${match}`;
+            
+            document.getElementById('sheet-apply-btn').onclick = () => executeApplyAdvanced(job);
+            document.getElementById('detail-sheet').classList.add('open');
+        }
+        function closeDetailSheet() { document.getElementById('detail-sheet').classList.remove('open'); }
+
+        async function executeApplyAdvanced(job) {
+            alert(`🎉 ማመልከቻዎ በተሳካ ሁኔታ ተልኳል!`);
+            closeDetailSheet();
+            // አድሚን ኖቲፊኬሽን
+            const msg = `🚀 **አዲስ የስራ ማመልከቻ ገብቷል!**\n\n👤 **አመልካች:** ${currentUsername}\n💼 **የስራ መደብ:** ${job.title}\n🏢 **ድርጅት:** ${job.company}`;
+            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: ADMIN_TELEGRAM_ID, text: msg }) });
+        }
+
+        // 💬 INTERNAL IN-APP CHAT LOGIC
+        function openChatWindow(name, avatar) {
+            document.getElementById('chat-window-name').innerText = name;
+            document.getElementById('chat-window-avatar').innerText = avatar;
+            
+            // ደሚ የኢንተርቪው ሊንክ እና መልዕክት መጫኛ
+            const msgContainer = document.getElementById('chat-messages-container');
+            msgContainer.innerHTML = `
+                <div class="msg-bubble msg-incoming">ሰላም እባክዎ የእርስዎን CV እዚህ ያጋሩን።</div>
+                <div class="msg-bubble msg-outgoing">እሺ አሁን እልካለሁ።</div>
+                <div class="msg-bubble msg-incoming">የእርስዎ ማመልከቻ ተቀባይነት አግኝቷል። የ Interview ሊንክ ይኸውልዎ፦ https://zoom.us/j/interview-link 📅</div>
+            `;
+            document.getElementById('chat-window-box').style.display = 'flex';
+        }
+        function closeChatWindow() { document.getElementById('chat-window-box').style.display = 'none'; }
+        
+        function sendChatMessageInternal() {
+            const text = document.getElementById('chat-reply-input').value;
+            if(!text) return;
+            const msgContainer = document.getElementById('chat-messages-container');
+            const bubble = document.createElement('div');
+            bubble.className = 'msg-bubble msg-outgoing';
+            bubble.innerText = text;
+            msgContainer.appendChild(bubble);
+            document.getElementById('chat-reply-input').value = "";
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+        }
+
+        // 🔔 APPLICATION STATUS CHANGE NOTIFICATIONS (ማመልከቻ ሲታይ ወይም ኢንተርቪው ሲጠራ)
+        async function triggerStatusNotification(statusType, textSummary) {
+            alert(`✅ የስታተስ ማሳወቂያ (${statusType}) ለተጠቃሚው በቴሌግራም ቦት ተልኳል!`);
+            const botMsg = `🔔 **የማመልከቻ ሁኔታ ማሻሻያ (Application Update)!**\n\nሰላም ${currentUsername} 👋፣ የላኩት ማመልከቻ ሁኔታ ተቀይሯል፦\n\n📌 **አዲስ ሁኔታ፦** ${textSummary}\n\n🚀 አሁኑኑ መተግበሪያውን ከፍተው ማረጋገጥ ይችላሉ!`;
+            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: currentUserId, text: botMsg, parse_mode: 'Markdown' })
             });
         }
 
-        // 🔍 የ Category ማጣሪያ (Filter)
-        function filterJobs(dept, element) {
-            document.querySelectorAll('.cat-chip').forEach(chip => chip.classList.remove('active'));
-            element.classList.add('active');
-            
-            if(dept === 'All') {
-                renderJobCards(allJobsFetched);
-            } else {
-                const filtered = allJobsFetched.filter(job => job.department.toLowerCase() === dept.toLowerCase());
-                renderJobCards(filtered);
-            }
-        }
-
-        // 📊 የአድሚን ቁጥሮችን ማደሻ (Stats)
-        async function fetchAdminStats() {
-            try {
-                const userRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?select=id`, { method: 'HEAD', headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY, 'Prefer': 'count=exact' } });
-                const jobRes = await fetch(`${SUPABASE_URL}/rest/v1/jobs?select=id`, { method: 'HEAD', headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY, 'Prefer': 'count=exact' } });
-                
-                if(userRes.headers.get('content-range')) {
-                    document.getElementById('stat-users').innerText = userRes.headers.get('content-range').split('/')[1];
-                }
-                if(jobRes.headers.get('content-range')) {
-                    document.getElementById('stat-jobs').innerText = jobRes.headers.get('content-range').split('/')[1];
-                }
-            } catch(e) {}
-        }
-
-        // 💾 የባለሙያ መረጃዎችን ወደ Supabase ማስቀመጫ
+        // 💾 SAVE PROFILE TO SUPABASE
         async function saveProfileToSupabase() {
             const fullname = document.getElementById('user-fullname').value;
             const phone = document.getElementById('user-phone').value;
             const department = document.getElementById('user-department').value;
+            const experience = document.getElementById('user-experience').value;
 
             if(!fullname || !phone || !department) { alert("እባክዎ መረጃዎችን ያሟሉ!"); return; }
-
-            const profileData = { id: currentUserId, username: currentUsername, fullname, phone, department: department.trim() };
-
-            const res = await fetch(`${SUPABASE_URL}/rest/v1/profiles`, {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' },
-                body: JSON.stringify(profileData)
-            });
-
-            if (res.ok) { alert("መረጃዎ በተሳካ ሁኔታ ተቀምጧል! 🎉"); fetchAdminStats(); navigateTo('home-page'); }
-            else { alert("ማስቀመጥ አልተቻለም፣ ግንኙነትዎን ያረጋግጡ።"); }
+            userProfileData = { id: currentUserId, username: currentUsername, fullname, phone, department: department.trim(), experience: parseInt(experience)||0 };
+            
+            const res = await fetch(`${SUPABASE_URL}/rest/v1/profiles`, { method: 'POST', headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' }, body: JSON.stringify(userProfileData) });
+            if (res.ok) { alert("መረጃዎ ተቀምጧል! 🎉"); fetchJobs(); navigateTo('home-page'); }
         }
 
-        // 📢 አዲስ ስራ መለጠፊያ እና ለሚመለከተው ዲፓርትመንት ኖቲፊኬሽን መላኪያ
+        // 📢 ADMIN POST NEW JOB & BOT NOTIFICATION (ከአዳዲስ ማጣሪያዎች ጋር የተጣጣመ)
         async function adminPostJobAndNotify() {
             const title = document.getElementById('job-title').value;
             const company = document.getElementById('job-company').value;
             const location = document.getElementById('job-location').value;
+            const type = document.getElementById('job-type-input').value;
+            const exp = document.getElementById('job-exp-input').value;
             const salary = document.getElementById('job-salary-input').value;
             const dept = document.getElementById('job-dept-input').value;
             const desc = document.getElementById('job-desc').value;
@@ -366,43 +431,29 @@
             if(!title || !company || !dept) { alert("እባክዎ መረጃዎችን ያሟሉ!"); return; }
             document.getElementById('btn-post-job').innerText = "እየተላከ ነው...";
 
-            const jobData = { title, company, location, salary, department: dept.trim(), description: desc, posted_by: currentUserId };
+            const jobData = { title, company, location, salary, department: dept.trim(), description: desc, experience: parseInt(exp)||0, job_type: type, posted_by: currentUserId };
             
-            const jobRes = await fetch(`${SUPABASE_URL}/rest/v1/jobs`, {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
-                body: JSON.stringify(jobData)
-            });
+            const jobRes = await fetch(`${SUPABASE_URL}/rest/v1/jobs`, { method: 'POST', headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(jobData) });
 
             if(!jobRes.ok) { alert("ስራውን መለጠፍ አልተቻለም!"); document.getElementById('btn-post-job').innerText = "እንደገና ይሞክሩ"; return; }
 
-            const userRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?department=ilike.*${dept.trim()}*`, {
-                headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY }
-            });
+            const userRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?department=ilike.*${dept.trim()}*`, { headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY } });
 
             if (userRes.ok) {
                 const targets = await userRes.json();
                 for(let user of targets) {
                     if(user.id) {
-                        const messageText = `📢 **አዲስ የስራ ማሳወቂያ!**\n\nሰላም ${user.fullname} 👋፣ ከእርስዎ የሙያ ዘርፍ (**${dept}**) ጋር የሚስማማ አዲስ ስራ አሁን ተለጥፏል! \n\n💼 **የስራ መደብ፦** ${title}\n🏢 **ድርጅት፦** ${company}\n📍 **ቦታ፦** ${location}\n\n🚀 አሁኑኑ SiraLink Mini-App ን በመክፈት ማመልከት ይችላሉ!`;
-                        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ chat_id: user.id, text: messageText, parse_mode: 'Markdown' })
-                        });
+                        const messageText = `📢 **አዲስ የሥራ ማሳወቂያ!**\n\nሰላም ${user.fullname}፣ ከእርስዎ የሙያ ዘርፍ (**${dept}**) ጋር **95% የሚስማማ** አዲስ ስራ አሁን ተለጥፏል! \n\n💼 **የስራ መደብ፦** ${title}\n🏢 **ድርጅት፦** ${company}\n📍 **ቦታ፦** ${location}\n⏳ **የስራ ልምድ፦** ${exp} አመት\n\n🚀 አሁኑኑ SiraLink Mini-App ን በመክፈት ማመልከት ይችላሉ!`;
+                        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: user.id, text: messageText, parse_mode: 'Markdown' }) });
                     }
                 }
-                alert(`✅ ስራው ወጥቷል! ለ ${targets.length} የ "${dept}" ባለሙያዎች ማሳወቂያ ተልኳል።`);
+                alert(`✅ ስራው ወጥቷል! ለ ${targets.length} ባለሙያዎች ማሳወቂያ ተልኳል።`);
             }
 
-            // ፎርም ማጽጃ
             document.getElementById('job-title').value = "";
             document.getElementById('job-company').value = "";
-            document.getElementById('job-dept-input').value = "";
-            document.getElementById('job-desc').value = "";
-            document.getElementById('btn-post-job').innerText = "ስራውን አውጣና Notification ላክ 📢";
-            
-            initAppTabs();
+            document.getElementById('btn-post-job').innerText = "አውጣና ኖቲፊኬሽን ላክ 📢";
+            fetchJobs(); navigateTo('home-page');
         }
     </script>
 </body>
