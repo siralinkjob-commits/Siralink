@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SiraLink - Stable Advanced Portal</title>
+    <title>SiraLink - Fixed Advanced Portal</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         /* 🎨 Premium Glassmorphic Dark UI */
@@ -148,11 +148,11 @@
     </div>
 
     <script>
-        // ⚙️ CONFIGURATION KEYS (እነዚህን በጥንቃቄ ይተኩ)
-        const ADMIN_TELEGRAM_ID = 8525980303; // <-- ያንተን የቴሌግራም ID ቁጥር እዚህ ያስገቡ
-        const BOT_TOKEN = "8772313110:AAEUCxQ9POnBagSsdq019hgS7weoEQbGe-U"; // ያንተ/ሽን ቦት ቶከን
-        const SUPABASE_URL = "https://sehdvceagbkowljnpfnn.supabase.co"; // <-- የሱፓቤዝ URL ይተኩ
-        const SUPABASE_KEY = "sb_publishable_cteBZ-q0GqKP_y0W95FfOA_zkQwoHKx"; // <-- የሱፓቤዝ KEY ይተኩ
+        // ⚙️ CONFIGURATION KEYS
+        const ADMIN_TELEGRAM_ID = 8525980303; 
+        const BOT_TOKEN = "8772313110:AAEUCxQ9POnBagSsdq019hgS7weoEQbGe-U"; 
+        const SUPABASE_URL = "https://sehdvceagbkowljnpfnn.supabase.co"; 
+        const SUPABASE_KEY = "sb_publishable_cteBZ-q0GqKP_y0W95FfOA_zkQwoHKx"; 
 
         let tg = window.Telegram?.WebApp;
         let currentUserId = 999999;
@@ -167,9 +167,13 @@
             if (user) {
                 currentUserId = user.id;
                 currentUsername = user.username ? "@" + user.username : "User_" + user.id;
-                if (currentUserId === ADMIN_TELEGRAM_ID) document.getElementById('nav-admin').style.display = 'flex';
+                if (Number(currentUserId) === Number(ADMIN_TELEGRAM_ID)) {
+                    document.getElementById('nav-admin').style.display = 'flex';
+                }
             }
         }
+        // ለአካባቢው መሞከሪያ አድሚን እንዲታይ ማድረግ ከፈለጉ (Optional Line)
+        if (currentUserId === 999999) document.getElementById('nav-admin').style.display = 'flex';
 
         function initAppTabs() { navigateTo('home-page'); fetchJobs(); }
         
@@ -185,22 +189,38 @@
             el.classList.add('active'); navigateTo(pId);
         }
 
+        // 🔄 ስራዎችን ከ Supabase የማምጫ ሞተር (የተስተካከለ)
         async function fetchJobs() {
             try {
-                const res = await fetch(`${SUPABASE_URL}/rest/v1/jobs?order=id.desc`, { headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY } });
-                if(res.ok) { allJobs = await res.json(); renderJobCards(allJobs, 'job-list-container'); }
-            } catch (e) {}
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/jobs?order=id.desc`, { 
+                    headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY } 
+                });
+                if(res.ok) { 
+                    allJobs = await res.json(); 
+                    renderJobCards(allJobs, 'job-list-container'); 
+                } else {
+                    const errText = await res.text();
+                    alert("Supabase Error (Jobs): " + errText);
+                }
+            } catch (e) {
+                alert("ኔትወርክ ስህተት: " + e.message);
+            }
         }
 
-        // 🔍 MULTI-FILTER LOGIC (Search + Location + Category) - 100% Client Side, No DB Overhead!
         function filterAllJobs() {
             const searchQuery = document.getElementById('search-input').value.toLowerCase();
             const locationQuery = document.getElementById('location-filter').value;
 
             const filtered = allJobs.filter(job => {
-                const matchesSearch = job.title.toLowerCase().includes(searchQuery) || job.company.toLowerCase().includes(searchQuery);
-                const matchesLoc = (locationQuery === 'All') || (job.location === locationQuery);
-                const matchesCat = (selectedCategory === 'All') || (job.department.toLowerCase().trim() === selectedCategory.toLowerCase().trim());
+                const titleStr = job.title ? job.title.toLowerCase() : '';
+                const companyStr = job.company ? job.company.toLowerCase() : '';
+                const deptStr = job.department ? job.department.toLowerCase().trim() : '';
+                const locStr = job.location ? job.location : 'All';
+
+                const matchesSearch = titleStr.includes(searchQuery) || companyStr.includes(searchQuery);
+                const matchesLoc = (locationQuery === 'All') || (locStr === locationQuery);
+                const matchesCat = (selectedCategory === 'All') || (deptStr === selectedCategory.toLowerCase().trim());
+                
                 return matchesSearch && matchesLoc && matchesCat;
             });
 
@@ -214,7 +234,6 @@
             filterAllJobs();
         }
 
-        // ⭐️ SAVE / FAVORITE LOGIC (LocalStorage በመጠቀም ያለምንም DB Error ይሰራል!)
         function toggleSaveJob(jobId, event) {
             event.stopPropagation();
             if(savedJobIds.includes(jobId)) {
@@ -233,7 +252,11 @@
 
         function renderJobCards(jobs, containerId, isSavedPage = false) {
             const container = document.getElementById(containerId);
-            if(jobs.length === 0) { container.innerHTML = '<p style="font-size:12px; color:#64748b; padding:10px;">ምንም ስራ አልተገኘም...</p>'; return; }
+            if(!container) return;
+            if(jobs.length === 0) { 
+                container.innerHTML = '<p style="font-size:12px; color:#64748b; padding:10px; text-align:center;">ምንም ስራ አልተገኘም...</p>'; 
+                return; 
+            }
             container.innerHTML = '';
             
             jobs.forEach(job => {
@@ -244,11 +267,11 @@
                 
                 card.innerHTML = `
                     <button class="fav-btn ${isSaved ? 'saved' : ''}" onclick="toggleSaveJob(${job.id}, event)">★</button>
-                    <div class="job-title">${job.title}</div>
-                    <div class="job-company">${job.company}</div>
+                    <div class="job-title">${job.title || 'No Title'}</div>
+                    <div class="job-company">${job.company || 'Unknown'}</div>
                     <div class="job-tags-row">
-                        <span class="job-tag">${job.department}</span>
-                        <span class="job-tag" style="background:rgba(16,185,129,0.15); color:#10b981;">📍 ${job.location}</span>
+                        <span class="job-tag">${job.department || 'General'}</span>
+                        <span class="job-tag" style="background:rgba(16,185,129,0.15); color:#10b981;">📍 ${job.location || 'Not Specified'}</span>
                     </div>
                 `;
                 container.appendChild(card);
@@ -256,27 +279,30 @@
         }
 
         function openDetailSheet(job) {
-            document.getElementById('sheet-title').innerText = job.title;
-            document.getElementById('sheet-company').innerText = job.company;
-            document.getElementById('sheet-dept').innerText = job.department;
-            document.getElementById('sheet-location').innerText = job.location;
-            document.getElementById('sheet-salary').innerText = job.salary;
-            document.getElementById('sheet-desc').innerText = job.description;
+            document.getElementById('sheet-title').innerText = job.title || '-';
+            document.getElementById('sheet-company').innerText = job.company || '-';
+            document.getElementById('sheet-dept').innerText = job.department || '-';
+            document.getElementById('sheet-location').innerText = job.location || '-';
+            document.getElementById('sheet-salary').innerText = job.salary || 'Negotiable';
+            document.getElementById('sheet-desc').innerText = job.description || 'No Description';
             
             document.getElementById('sheet-apply-btn').onclick = () => executeApply(job);
             document.getElementById('detail-sheet').classList.add('open');
         }
         function closeDetailSheet() { document.getElementById('detail-sheet').classList.remove('open'); }
 
-        // 🚀 APPLY ACTION (ለአድሚኑ በቴሌግራም መልዕክት ይልካል)
         async function executeApply(job) {
             alert(`🎉 ማመልከቻዎ በተሳካ ሁኔታ ተልኳል!`);
             closeDetailSheet();
             const msg = `🚀 **አዲስ የስራ ማመልከቻ ገብቷል!**\n\n👤 **አመልካች:** ${currentUsername}\n💼 **የስራ መደብ:** ${job.title}\n🏢 **ድርጅት:** ${job.company}`;
-            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: ADMIN_TELEGRAM_ID, text: msg }) });
+            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, { 
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' }, 
+                body: JSON.stringify({ chat_id: ADMIN_TELEGRAM_ID, text: msg }) 
+            });
         }
 
-        // 💾 የድሮው 100% አስተማማኝ የባለሙያ መረጃ ማስቀመጫ ኮድ
+        // 💾 የባለሙያ መረጃ ማስቀመጫ ኮድ (ከተሻሻለ ጥበቃ ጋር)
         async function saveProfileToSupabase() {
             const fullname = document.getElementById('user-fullname').value;
             const phone = document.getElementById('user-phone').value;
@@ -285,12 +311,30 @@
             if(!fullname || !phone || !department) { alert("እባክዎ መረጃዎችን ያሟሉ!"); return; }
             const profileData = { id: currentUserId, username: currentUsername, fullname, phone, department: department.trim() };
             
-            const res = await fetch(`${SUPABASE_URL}/rest/v1/profiles`, { method: 'POST', headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' }, body: JSON.stringify(profileData) });
-            if (res.ok) { alert("መረጃዎ ተቀምጧል! 🎉"); navigateTo('home-page'); }
-            else { alert("መረጃውን ለማስቀመጥ አልተቻለም። እባክዎ ሊንኮቹን ያረጋግጡ።"); }
+            try {
+                const res = await fetch(`${SUPABASE_URL}/rest/v1/profiles`, { 
+                    method: 'POST', 
+                    headers: { 
+                        'Authorization': `Bearer ${SUPABASE_KEY}`, 
+                        'apikey': SUPABASE_KEY, 
+                        'Content-Type': 'application/json', 
+                        'Prefer': 'resolution=merge-duplicates' 
+                    }, 
+                    body: JSON.stringify(profileData) 
+                });
+                if (res.ok) { 
+                    alert("መረጃዎ ተቀምጧል! 🎉"); 
+                    navigateTo('home-page'); 
+                } else { 
+                    const errText = await res.text();
+                    alert("Supabase Error (Profile): " + errText + "\n\n⚠️ ማሳሰቢያ፦ እባክዎ Supabase ላይ የ 'profiles' ሰንጠረዥ እና 'department' ኮለሞች በትንሽ ፊደል መኖራቸውን ያረጋግጡ!");
+                }
+            } catch(e) {
+                alert("የግንኙነት ስህተት፦ " + e.message);
+            }
         }
 
-        // 📢 የድሮው ዋነኛው የስራ መለጠፊያ እና የቦት ኖቲፊኬሽን ሞተር (ሳይነካ እንዳለ የቀጠለ)
+        // 📢 አዲስ ሥራ መለጠፊያ እና ለባለሙያዎች ኖቲፊኬሽን መላኪያ ሞተር
         async function adminPostJobAndNotify() {
             const title = document.getElementById('job-title').value;
             const company = document.getElementById('job-company').value;
@@ -299,33 +343,65 @@
             const dept = document.getElementById('job-dept-input').value;
             const desc = document.getElementById('job-desc').value;
 
-            if(!title || !company || !dept) { alert("እባክዎ መረጃዎችን ያሟሉ!"); return; }
+            if(!title || !company || !dept) { alert("እባክዎ ዋና ዋና መረጃዎችን ያሟሉ!"); return; }
             document.getElementById('btn-post-job').innerText = "እየተላከ ነው...";
 
             const jobData = { title, company, location, salary, department: dept.trim(), description: desc, posted_by: currentUserId };
             
-            const jobRes = await fetch(`${SUPABASE_URL}/rest/v1/jobs`, { method: 'POST', headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' }, body: JSON.stringify(jobData) });
+            try {
+                const jobRes = await fetch(`${SUPABASE_URL}/rest/v1/jobs`, { 
+                    method: 'POST', 
+                    headers: { 
+                        'Authorization': `Bearer ${SUPABASE_KEY}`, 
+                        'apikey': SUPABASE_KEY, 
+                        'Content-Type': 'application/json' 
+                    }, 
+                    body: JSON.stringify(jobData) 
+                });
 
-            if(!jobRes.ok) { alert("ሥራውን መለጠፍ አልተቻለም!"); document.getElementById('btn-post-job').innerText = "እንደገና ይሞክሩ"; return; }
-
-            // ለሚመለከተው ሰው ኖቲፊኬሽን የመላኪያ ሞተር
-            const userRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?department=ilike.*${dept.trim()}*`, { headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY } });
-
-            if (userRes.ok) {
-                const targets = await userRes.json();
-                for(let user of targets) {
-                    if(user.id) {
-                        const messageText = `📢 **አዲስ የስራ ማሳወቂያ!**\n\nሰላም ${user.fullname} 👋፣ ከእርስዎ የሙያ ዘርፍ (**${dept}**) ጋር የሚስማማ አዲስ ስራ አሁን ተለጥፏል! \n\n💼 **የስራ መደብ፦** ${title}\n🏢 **ድርጅት፦** ${company}\n📍 **ቦታ፦** ${location}\n\n🚀 አሁኑኑ መተግበሪያውን በመክፈት ማመልከት ይችላሉ!`;
-                        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: user.id, text: messageText, parse_mode: 'Markdown' }) });
-                    }
+                if(!jobRes.ok) { 
+                    const errText = await jobRes.text();
+                    alert("ሥራውን መለጠፍ አልተቻለም! Error: " + errText); 
+                    document.getElementById('btn-post-job').innerText = "እንደገና ይሞክሩ"; 
+                    return; 
                 }
-                alert(`✅ ስራው ወጥቷል! ለ ${targets.length} የ "${dept}" ባለሙያዎች ማሳወቂያ ተልኳል።`);
-            }
 
-            document.getElementById('job-title').value = "";
-            document.getElementById('job-company').value = "";
-            document.getElementById('btn-post-job').innerText = "አውጣና ኖቲፊኬሽን ላክ 📢";
-            fetchJobs(); navigateTo('home-page');
+                // ኖቲፊኬሽን መላኪያ
+                const userRes = await fetch(`${SUPABASE_URL}/rest/v1/profiles?department=ilike.*${encodeURIComponent(dept.trim())}*`, { 
+                    headers: { 'Authorization': `Bearer ${SUPABASE_KEY}`, 'apikey': SUPABASE_KEY } 
+                });
+
+                if (userRes.ok) {
+                    const targets = await userRes.json();
+                    let sentCount = 0;
+                    for(let user of targets) {
+                        if(user.id) {
+                            const messageText = `📢 **አዲስ የስራ ማሳወቂያ!**\n\nሰላም ${user.fullname} 👋፣ ከእርስዎ የሙያ ዘርፍ (**${dept}**) ጋር የሚስማማ አዲስ ስራ አሁን ተለጥፏል! \n\n💼 **የስራ መደብ፦** ${title}\n🏢 **ድርጅት፦** ${company}\n📍 **ቦታ፦** ${location}\n\n🚀 አሁኑኑ መተግበሪያውን በመክፈት ማመልከት ይችላሉ!`;
+                            await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, { 
+                                method: 'POST', 
+                                headers: { 'Content-Type': 'application/json' }, 
+                                body: JSON.stringify({ chat_id: user.id, text: messageText, parse_mode: 'Markdown' }) 
+                            });
+                            sentCount++;
+                        }
+                    }
+                    alert(`✅ ስራው ወጥቷል! ለ ${sentCount} የ "${dept}" ባለሙያዎች ማሳወቂያ ተልኳል።`);
+                } else {
+                    alert("ስራው ተለጥፏል፤ ነገር ግን ተጠቃሚዎችን ፈልጎ ኖቲፊኬሽን ለመላክ አልተቻለም።");
+                }
+
+                // ፎርም ማጽጃ
+                document.getElementById('job-title').value = "";
+                document.getElementById('job-company').value = "";
+                document.getElementById('job-desc').value = "";
+                document.getElementById('btn-post-job').innerText = "አውጣና ኖቲፊኬሽን ላክ 📢";
+                fetchJobs(); 
+                navigateTo('home-page');
+
+            } catch (e) {
+                alert("ያልታሰበ ስህተት፦ " + e.message);
+                document.getElementById('btn-post-job').innerText = "አውጣና ኖቲፊኬሽን ላክ 📢";
+            }
         }
     </script>
 </body>
