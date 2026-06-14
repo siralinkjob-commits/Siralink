@@ -4,9 +4,158 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SiraLink - Get Started</title>
-    <link rel="stylesheet" href="style.css">
+    
+    <style>
+        /* መሠረታዊ ቅንብሮች */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #060913; /* ጥልቅ ጥቁር ሰማያዊ ከለር */
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        /* የሞባይል ስክሪን መጠን መቆጣጠሪያ */
+        .splash-container {
+            width: 100%;
+            max-width: 390px; /* የiPhone/Android ስክሪን መጠን */
+            min-height: 700px;
+            background: linear-gradient(180deg, #0b142c 0%, #060913 100%);
+            border-radius: 30px;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            border: 1px solid #162245;
+        }
+
+        /* ሎጎ ክፍል */
+        .logo-section {
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .logo-text {
+            font-size: 26px;
+            font-weight: 700;
+        }
+
+        .tagline {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 2px;
+        }
+
+        /* መፈክር */
+        .hero-section {
+            margin: 40px 0;
+        }
+
+        .hero-section h2 {
+            font-size: 28px;
+            font-weight: 800;
+            line-height: 1.3;
+            margin-bottom: 15px;
+        }
+
+        .hero-section .description {
+            font-size: 14px;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+
+        /* አዝራሮች */
+        .action-section {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: white;
+            border: 1px solid #334155;
+        }
+
+        .btn-secondary:hover {
+            background-color: #0f172a;
+        }
+
+        /* ስታቲስቲክስ */
+        .stats-section {
+            display: flex;
+            justify-content: space-between;
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 15px;
+            border: 1px solid rgba(255,255,255,0.05);
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            text-align: center;
+            flex: 1;
+        }
+
+        .stat-box h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+        }
+
+        .stat-box p {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+    </style>
 </head>
 <body>
+
     <div class="splash-container">
         <div class="logo-section">
             <div class="logo-icon">S</div>
@@ -43,7 +192,6 @@
     <script>
         function startApp() {
             alert("ወደ Candidate Home ገጽ እየተጓዝን ነው...");
-            // ወደ ቀጣዩ ገጽ ለመሄድ ቪው ይቀየራል
         }
         function showHowItWorks() {
             alert("SiraLink እንዴት እንደሚሰራ መመሪያ!");
