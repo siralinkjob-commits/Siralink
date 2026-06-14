@@ -385,9 +385,17 @@ btn.classList.add(
 }
 
 async function saveProfile(){
+let telegramId = 123456789; 
+let telegramUsername = "";
+
+if(window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe.user){
+    telegramId = window.Telegram.WebApp.initDataUnsafe.user.id;
+    telegramUsername = window.Telegram.WebApp.initDataUnsafe.user.username || "";
+}
 
 const data = {
-
+telegram_id: telegramId,
+username: telegramUsername,
 full_name:
 document.getElementById(
 'fullName'
@@ -396,12 +404,12 @@ document.getElementById(
 birth_year:
 document.getElementById(
 'birthYear'
-).value,
+).value ? parseInt(document.getElementById('birthYear').value) : null,
 
 birth_month:
 document.getElementById(
 'birthMonth'
-).value,
+).value ? parseInt(document.getElementById('birthMonth').value) : null,
 
 gender:
 document.getElementById(
@@ -431,13 +439,13 @@ document.getElementById(
 graduation_year:
 document.getElementById(
 'graduationYear'
-).value,
+).value ? parseInt(document.getElementById('graduationYear').value) : null,
 
 experience_years:
 document.getElementById(
 'experience'
-).value
-
+).value ? parseInt(document.getElementById('experience').value) : 0,
+is_profile_completed: true
 };
 
 const { error } =
@@ -448,9 +456,9 @@ await supabase
 .insert([data]);
 
 if(error){
-
+console.error(error);
 alert(
-'Failed to Save'
+'Failed to Save: ' + error.message
 );
 
 }else{
@@ -772,7 +780,7 @@ if(user){
 
 const text =
 
-`ሰላም ${user.username}
+`ሰላም ${user.username || user.first_name}
 
 እንኳን ወደ SiraLink
 በደህና መጡ`;
@@ -829,6 +837,7 @@ document.querySelector(
 
 if(
 bell &&
+data &&
 data.length > 0
 ){
 
